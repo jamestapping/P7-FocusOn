@@ -58,10 +58,11 @@ extension TodayGoalTableViewCell: UITextViewDelegate {
     
     func textViewDidChange(_ textView: UITextView) {
         
-        let size = CGSize(width: textView.frame.size.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        textView.frame.size.height = estimatedSize.height
-        delegate?.self.updateCellHeight()
+//        let size = CGSize(width: textView.frame.size.width, height: .infinity)
+//        let estimatedSize = textView.sizeThatFits(size)
+//        textView.frame.size.height = estimatedSize.height
+        
+        delegate?.updateCellHeight()
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {

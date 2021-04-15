@@ -14,10 +14,8 @@ class TodayTableViewController: UITableViewController {
         
         let newGoalID = dataManager.createNewGoal()
         dataManager.createNewTask(goalID: newGoalID)
-    
-        //updateTableView()
         
-        goals = dataManager.returnAllGoals()
+        goals = dataManager.returnTodaysGoals()
         
         tableView.reloadData()
         
@@ -32,6 +30,7 @@ class TodayTableViewController: UITableViewController {
     
     let untick = UIImage(named: "untick-gray")
     let untickWhite = UIImage(named: "untick-white")
+    let midnightBlue = UIColor(named: "MidnightBlue")
     
     var dataManager = DataManager()
     
@@ -39,23 +38,33 @@ class TodayTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print ("Today View  - ViewDidLoad")
+        
 
         configure()
         
-        updateTableView()
+        // updateTableView()
         
-    }   
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print ("Today View  - ViewDidAppear")
+        
+       updateTableView()
+        
+    }
     
     func configure() {
         
-        // Change nav bar titles / button fonts
+        // Change navigation bar titles / button fonts
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Helvetica Neue", size: 15)!], for: UIControl.State.normal)
-        
-            tableView.delegate = self
-            tableView.dataSource = self
+
 
 
         }
@@ -64,7 +73,9 @@ class TodayTableViewController: UITableViewController {
         
         print ("Updating TableView ....")
         
-        goals = dataManager.returnAllGoals()
+        goals = dataManager.returnTodaysGoals()
+        
+        print ("Return goals count", goals.count)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.tableView.reloadData()
@@ -96,36 +107,6 @@ class TodayTableViewController: UITableViewController {
     
     }
     
-    // Swipe to delete tasks and Goals
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
-        if indexPath.row == 0 {
-            
-            deleteGoalCell(indexPath: indexPath)
-            
-            goals.remove(at: indexPath.section)
-            
-            let indexSet = IndexSet(arrayLiteral: indexPath.section)
-            
-            tableView.deleteSections(indexSet, with: .fade)
-
-            
-        } else
-        
-        if editingStyle == .delete {
-            
-            deleteTaskcell(indexPath: indexPath)
-            
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                self.tableView.reloadData()
-            }
-            
-        }
-        
-    }
     
     // Disable edit for info cell and last add task cell
     
@@ -144,7 +125,44 @@ class TodayTableViewController: UITableViewController {
         
     }
     
+    // Custom Swipe to delete tasks and Goals
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+         
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { [self] (action, view, completion) in
+            
+            if indexPath.row == 0 {
+                
+                deleteGoalCell(indexPath: indexPath)
+                
+                goals.remove(at: indexPath.section)
+                
+                let indexSet = IndexSet(arrayLiteral: indexPath.section)
+                
+                tableView.deleteSections(indexSet, with: .fade)
+
+            } else {
+                
+                deleteTaskcell(indexPath: indexPath)
+                
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    self.tableView.reloadData()
+                }
+                
+            }
+            
+                completion(true)
+            }
+        
+        delete.backgroundColor = midnightBlue
+         
+            let config = UISwipeActionsConfiguration(actions: [delete])
+            // config.performsFirstActionWithFullSwipe = true
+         
+            return config
+        }
     
     func deleteTaskcell(indexPath: IndexPath) {
         
@@ -195,7 +213,13 @@ class TodayTableViewController: UITableViewController {
             
             let numberOfTasks = tasks.count - 1
             let numberOfCompletedTasks = tasks.filter{ $0.completed}.count
-            let numberOfTasksToComplete = numberOfTasks - numberOfCompletedTasks
+            var numberOfTasksToComplete = numberOfTasks - numberOfCompletedTasks
+            
+            if numberOfTasksToComplete == -1 {
+                
+                numberOfTasksToComplete = 1
+                
+            }
             
             if numberOfTasks == 0 {
                 
@@ -225,7 +249,6 @@ class TodayTableViewController: UITableViewController {
             cell.taskToggleButton.isSelected = false
             cell.taskTextView.placeholder = ""
 
-        
             return cell
             
         default:
@@ -262,7 +285,6 @@ class TodayTableViewController: UITableViewController {
             self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
         }
     }
-
 }
 
 extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate {
@@ -274,14 +296,15 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         
         let section = indexPath?.section
         
-        let row = indexPath!.row
-        
-        print(row)
-        
         if section == goals.count - 1 {
             
-            print ("scrollToBottomRow")
-            tableView.scrollToBottomRow()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                
+                print ("scrollToBottomRow")
+                
+                let newGoalIndexPath = IndexPath(row: 0, section: self.tableView.numberOfSections - 1)
+                self.tableView.scrollToRow(at: newGoalIndexPath, at: .top, animated: true)
+            }
             
         }
         
@@ -325,11 +348,8 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
     
     func createNewTask(cell: TodayTaskTableViewCell?) {
         
-        guard let cell = cell, let indexPath = self.tableView.indexPath(for: cell) else {
+        guard let cell = cell, let indexPath = self.tableView.indexPath(for: cell) else { return }
             
-            return
-        }
-        
         let goalID = goals[indexPath.section].goalId
         let tasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
         
@@ -353,10 +373,8 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
     
     func updateTaskCell(cell: TodayTaskTableViewCell?, name: String) {
         
-        guard let cell = cell, let indexPath = self.tableView.indexPath(for: cell) else {
+        guard let cell = cell, let indexPath = self.tableView.indexPath(for: cell) else { return }
             
-            return
-        }
         
         let goalID = goals[indexPath.section].goalId
         let tasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)

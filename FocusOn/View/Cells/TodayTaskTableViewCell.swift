@@ -49,6 +49,7 @@ class TodayTaskTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         taskTextView?.delegate = self
+        
        
     }
     
@@ -85,10 +86,11 @@ extension TodayTaskTableViewCell: UITextViewDelegate {
             
         }
         
-        let size = CGSize(width: textView.frame.size.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        textView.frame.size.height = estimatedSize.height
-        delegate?.self.updateCellHeight()
+//        let size = CGSize(width: textView.frame.size.width, height: .infinity)
+//        let estimatedSize = textView.sizeThatFits(size)
+//        textView.frame.size.height = estimatedSize.height
+        
+        delegate?.updateCellHeight()
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -110,17 +112,13 @@ extension TodayTaskTableViewCell: UITextViewDelegate {
         addTaskButton.isHidden = true
         taskToggleButton.isHidden = false
         
-        // delegate?.moveToBottomOfTableView(cell: self)
+        delegate?.moveToBottomOfTableView(cell: self)
         
         delegate?.createNewTask(cell: self)
-        
-        //delegate?.moveToBottomOfTableView(cell: self)
         
     }
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        
-        // delegate?.moveToBottomOfTableView(cell: self)
         
         textView.unstrike()
         tempPlaceholder = textView.text

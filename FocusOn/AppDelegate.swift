@@ -13,14 +13,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        // Remove line from bottom of navigation bar
+        // Remove line from top of navigation bar
         
         UINavigationBar.appearance().shadowImage = UIImage()
         
         // Remove line from bottom of tab bar
         
-        UITabBar.appearance().clipsToBounds = true
-        UITabBar.appearance().shadowImage = nil
+        // UITabBar.appearance().clipsToBounds = true
+        // UITabBar.appearance().shadowImage = nil
         
         return true
     }
