@@ -43,7 +43,7 @@ class HistoryTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Change navigation bar titles
+        // Change navigation bar titles font
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
@@ -71,16 +71,9 @@ class HistoryTableViewController: UITableViewController {
         
         goals = dataManager.returnAllGoalsSortedByDate()
         
-        // Ugly fix - try and use guard
+        // No goals ? Return
         
-        if goals.count != 0 {
-            
-            tempMonth = (goals[goals.count - 1].date?.monthAsString())!
-            
-        } else {
-            
-            return
-        }
+        guard goals.count != 0 else { return }
         
         tempMonth = (goals[goals.count - 1].date?.monthAsString())!
         
@@ -140,7 +133,7 @@ class HistoryTableViewController: UITableViewController {
     }
     
     
-    // Function to build month headers for the TableView
+    // Function to build month headers for the TableView and goals per month
     
     func buildHistory() {
         

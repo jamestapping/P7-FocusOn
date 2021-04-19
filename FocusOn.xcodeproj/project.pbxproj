@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -21,6 +21,7 @@
 		7D8A7245260A2EA6002364DD /* CheckMarkToggleButtonWhite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8A7244260A2EA6002364DD /* CheckMarkToggleButtonWhite.swift */; };
 		7D8A724B260A37C7002364DD /* CheckMarkToggleButtonBlack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8A724A260A37C7002364DD /* CheckMarkToggleButtonBlack.swift */; };
 		7D8E6FD32627315C00A28C22 /* HistoryGoalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8E6FD22627315C00A28C22 /* HistoryGoalTableViewCell.swift */; };
+		7D8E6FEA26284C0100A28C22 /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8E6FE926284C0100A28C22 /* ProgressViewController.swift */; };
 		7D9D9CFC25FF648700A246A5 /* Goal+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9D9CF825FF648700A246A5 /* Goal+CoreDataClass.swift */; };
 		7D9D9CFD25FF648700A246A5 /* Goal+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9D9CF925FF648700A246A5 /* Goal+CoreDataProperties.swift */; };
 		7D9D9CFE25FF648700A246A5 /* Task+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D9D9CFA25FF648700A246A5 /* Task+CoreDataClass.swift */; };
@@ -37,9 +38,14 @@
 		7DFA01AC2611F7BC00C2924C /* TodayInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFA01AB2611F7BC00C2924C /* TodayInfoTableViewCell.swift */; };
 		7DFA01BA26138A2800C2924C /* DateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFA01B926138A2800C2924C /* DateManager.swift */; };
 		7DFA01BD26144D3000C2924C /* HistoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFA01BC26144D3000C2924C /* HistoryTableViewController.swift */; };
+		7DFFA2A9262E1772004D0416 /* ProgressStatsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFFA2A8262E1772004D0416 /* ProgressStatsHelper.swift */; };
+		9B450AFCC3387BF7B6C4FE4A /* Pods_FocusOn.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 632C0B679E52E2E5B5E271B1 /* Pods_FocusOn.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BA02BEC1611DF5D4A9E51CE /* Pods-FocusOn.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FocusOn.release.xcconfig"; path = "Target Support Files/Pods-FocusOn/Pods-FocusOn.release.xcconfig"; sourceTree = "<group>"; };
+		28E470F3AACFD46511E878AD /* Pods-FocusOn.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FocusOn.debug.xcconfig"; path = "Target Support Files/Pods-FocusOn/Pods-FocusOn.debug.xcconfig"; sourceTree = "<group>"; };
+		632C0B679E52E2E5B5E271B1 /* Pods_FocusOn.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FocusOn.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D0A49322601FD800034DB67 /* TodayTaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTaskTableViewCell.swift; sourceTree = "<group>"; };
 		7D12B27D25FBB9F800A21526 /* TodayTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTableViewController.swift; sourceTree = "<group>"; };
 		7D33D8AB25F9201900E8AE8D /* FocusOn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusOn.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -56,6 +62,7 @@
 		7D8A7244260A2EA6002364DD /* CheckMarkToggleButtonWhite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckMarkToggleButtonWhite.swift; sourceTree = "<group>"; };
 		7D8A724A260A37C7002364DD /* CheckMarkToggleButtonBlack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckMarkToggleButtonBlack.swift; sourceTree = "<group>"; };
 		7D8E6FD22627315C00A28C22 /* HistoryGoalTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryGoalTableViewCell.swift; sourceTree = "<group>"; };
+		7D8E6FE926284C0100A28C22 /* ProgressViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressViewController.swift; sourceTree = "<group>"; };
 		7D9D9CF825FF648700A246A5 /* Goal+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D9D9CF925FF648700A246A5 /* Goal+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Goal+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		7D9D9CFA25FF648700A246A5 /* Task+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -72,6 +79,7 @@
 		7DFA01AB2611F7BC00C2924C /* TodayInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayInfoTableViewCell.swift; sourceTree = "<group>"; };
 		7DFA01B926138A2800C2924C /* DateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateManager.swift; sourceTree = "<group>"; };
 		7DFA01BC26144D3000C2924C /* HistoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewController.swift; sourceTree = "<group>"; };
+		7DFFA2A8262E1772004D0416 /* ProgressStatsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressStatsHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,12 +87,22 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9B450AFCC3387BF7B6C4FE4A /* Pods_FocusOn.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		663C7F5479A9BAB4B6346642 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				28E470F3AACFD46511E878AD /* Pods-FocusOn.debug.xcconfig */,
+				0BA02BEC1611DF5D4A9E51CE /* Pods-FocusOn.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		7D0A491E2600BC2A0034DB67 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +131,8 @@
 			children = (
 				7D33D8AD25F9201900E8AE8D /* FocusOn */,
 				7D33D8AC25F9201900E8AE8D /* Products */,
+				663C7F5479A9BAB4B6346642 /* Pods */,
+				B77DECAAAE301443FADEE7F9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,7 +156,6 @@
 				7D33D8BA25F9201B00E8AE8D /* Assets.xcassets */,
 				7D33D8BC25F9201B00E8AE8D /* LaunchScreen.storyboard */,
 				7D33D8BF25F9201B00E8AE8D /* Info.plist */,
-				7D33D8B725F9201900E8AE8D /* FocusOn.xcdatamodeld */,
 			);
 			path = FocusOn;
 			sourceTree = "<group>";
@@ -154,11 +173,13 @@
 			isa = PBXGroup;
 			children = (
 				7D9D9D0725FF93FF00A246A5 /* DataManager.swift */,
+				7DFFA2A8262E1772004D0416 /* ProgressStatsHelper.swift */,
 				7DFA01B926138A2800C2924C /* DateManager.swift */,
 				7D9D9CF825FF648700A246A5 /* Goal+CoreDataClass.swift */,
 				7D9D9CF925FF648700A246A5 /* Goal+CoreDataProperties.swift */,
 				7D9D9CFA25FF648700A246A5 /* Task+CoreDataClass.swift */,
 				7D9D9CFB25FF648700A246A5 /* Task+CoreDataProperties.swift */,
+				7D33D8B725F9201900E8AE8D /* FocusOn.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -179,12 +200,21 @@
 		7DFA01BF26144D4400C2924C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7D12B27D25FBB9F800A21526 /* TodayTableViewController.swift */,
 				7DFA01BC26144D3000C2924C /* HistoryTableViewController.swift */,
 				7DC356CA261F109F00104405 /* HistoryDetailTableViewController.swift */,
-				7D12B27D25FBB9F800A21526 /* TodayTableViewController.swift */,
+				7D8E6FE926284C0100A28C22 /* ProgressViewController.swift */,
 				7DC67BDB261CA3E000D0147D /* SettingsTableViewController.swift */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		B77DECAAAE301443FADEE7F9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				632C0B679E52E2E5B5E271B1 /* Pods_FocusOn.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,9 +224,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7D33D8C225F9201B00E8AE8D /* Build configuration list for PBXNativeTarget "FocusOn" */;
 			buildPhases = (
+				6A8F0E523C778EB0285F70D5 /* [CP] Check Pods Manifest.lock */,
 				7D33D8A725F9201900E8AE8D /* Sources */,
 				7D33D8A825F9201900E8AE8D /* Frameworks */,
 				7D33D8A925F9201900E8AE8D /* Resources */,
+				C1B7B29CA8363451E7E18D55 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -252,6 +284,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		6A8F0E523C778EB0285F70D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FocusOn-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C1B7B29CA8363451E7E18D55 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FocusOn/Pods-FocusOn-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FocusOn/Pods-FocusOn-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FocusOn/Pods-FocusOn-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		7D33D8A725F9201900E8AE8D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -259,7 +333,9 @@
 			files = (
 				7DFA01BD26144D3000C2924C /* HistoryTableViewController.swift in Sources */,
 				7D6545532600106A007D26E0 /* TodayGoalTableViewCell.swift in Sources */,
+				7DFFA2A9262E1772004D0416 /* ProgressStatsHelper.swift in Sources */,
 				7DC67BE8261DC10D00D0147D /* UIViewController + showAlert.swift in Sources */,
+				7D8E6FEA26284C0100A28C22 /* ProgressViewController.swift in Sources */,
 				7D9D9CFC25FF648700A246A5 /* Goal+CoreDataClass.swift in Sources */,
 				7DC356C8261F0A1200104405 /* HistoryGoalDetailTableViewCell.swift in Sources */,
 				7DC356CB261F109F00104405 /* HistoryDetailTableViewController.swift in Sources */,
@@ -427,6 +503,7 @@
 		};
 		7D33D8C325F9201B00E8AE8D /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28E470F3AACFD46511E878AD /* Pods-FocusOn.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -446,6 +523,7 @@
 		};
 		7D33D8C425F9201B00E8AE8D /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0BA02BEC1611DF5D4A9E51CE /* Pods-FocusOn.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

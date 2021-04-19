@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -451,35 +452,6 @@
             </objects>
             <point key="canvasLocation" x="2365" y="690"/>
         </scene>
-        <!--FocusOn Progress-->
-        <scene sceneID="JUt-j9-qQ6">
-            <objects>
-                <tableViewController id="ckI-Zf-OZi" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="TTd-Df-T6V">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="dummyCell" id="74S-es-VGb">
-                                <rect key="frame" x="20" y="55.5" width="374" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="74S-es-VGb" id="Pxl-6S-b81">
-                                    <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="ckI-Zf-OZi" id="73X-fg-Mpw"/>
-                            <outlet property="delegate" destination="ckI-Zf-OZi" id="ggx-8P-bNY"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="FocusOn Progress" id="HTg-Eg-Afc"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Vbr-hK-uUe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1291" y="1450"/>
-        </scene>
         <!--Progress-->
         <scene sceneID="03k-ai-E2i">
             <objects>
@@ -491,12 +463,43 @@
                         <color key="barTintColor" name="BabyBlue"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="ckI-Zf-OZi" kind="relationship" relationship="rootViewController" id="CHf-86-o6B"/>
+                        <segue destination="HgN-7e-a4Q" kind="relationship" relationship="rootViewController" id="Buc-Gc-g9I"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mEq-W5-YfJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="335" y="1450"/>
+            <point key="canvasLocation" x="335" y="1587"/>
+        </scene>
+        <!--FocusOn Progress-->
+        <scene sceneID="eWg-Sf-8z5">
+            <objects>
+                <viewController id="HgN-7e-a4Q" customClass="ProgressViewController" customModule="FocusOn" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2wf-Go-6nH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oah-2W-pat" customClass="BarChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <color key="backgroundColor" name="BabyBlue"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="OEB-J2-VKr"/>
+                        <color key="backgroundColor" name="BabyBlue"/>
+                        <constraints>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="trailing" secondItem="OEB-J2-VKr" secondAttribute="trailing" id="AcN-rs-ns5"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="top" secondItem="OEB-J2-VKr" secondAttribute="top" id="XUn-IQ-3Jv"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="bottom" secondItem="OEB-J2-VKr" secondAttribute="bottom" id="eI9-Gm-cIP"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="leading" secondItem="OEB-J2-VKr" secondAttribute="leading" id="uSy-tm-99p"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="FocusOn Progress" id="bfF-Gb-bbJ"/>
+                    <connections>
+                        <outlet property="barChartView" destination="oah-2W-pat" id="fbW-o1-4hE"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ctk-hu-OMW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1876.8115942028987" y="1537.5"/>
         </scene>
         <!--Today-->
         <scene sceneID="bpm-1j-kr9">
@@ -556,7 +559,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hgT-O5-n0s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-833" y="-56"/>
+            <point key="canvasLocation" x="-1033" y="520"/>
         </scene>
     </scenes>
     <resources>
@@ -583,9 +586,6 @@
         </namedColor>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
             <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

@@ -243,6 +243,33 @@ class DataManager {
         return []
     }
     
+    func returnGoalsBetweenDate(from:Date, to:Date) -> [Goal] {
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        
+        let predicate = NSPredicate(format: "date >= %@ AND date <= %@", dateManager.startOfDay(for: from) as NSDate, dateManager.startOfDay(for: to) as NSDate)
+        
+        request.predicate = predicate
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+        let result = try context.fetch(request)
+            
+            return result
+        }
+        
+        catch {
+            
+            // Error ?
+            
+        }
+        
+        return []
+        
+    }
+    
     
     func returnTodaysGoals() -> [Goal] {
         
