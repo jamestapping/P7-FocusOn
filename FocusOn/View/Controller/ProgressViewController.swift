@@ -53,7 +53,6 @@ class ProgressViewController: UIViewController {
         leftAxis.drawZeroLineEnabled = true
         leftAxis.labelFont = UIFont.init(name: "Helvetica Neue", size: 12)!
         
-        
         // Loop through all 12 months
         
         // get the Data for each month ...
@@ -63,7 +62,7 @@ class ProgressViewController: UIViewController {
         
         var data: [(completed: Int, total: Int)] = []
         
-        data = statsHelper.dataForYear(year: Date())
+        data = statsHelper.returnYearData(year: Date())
         
         for i in 0 ... data.count - 1 {
             

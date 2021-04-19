@@ -11,26 +11,28 @@ class ProgressStatsHelper {
 
 let dataManager = DataManager()
 
-func dataForYear(year: Date) -> [(completed: Int, total: Int)] {
-          var data = [(completed: Int, total: Int)]()
-          let year = Calendar.current.component(.year, from: year)
-          for i in 1 ... 12 {
-              let firstDayOfMonth = Calendar.current.date(from: DateComponents(year: year, month: i, day: 1))!
-              let lastDayComponents = DateComponents(month: 1, day: -1)
-              let lastDayOfMonth = Calendar.current.date(byAdding: lastDayComponents, to: firstDayOfMonth)!
-              data.append(dataForDates(first: firstDayOfMonth, last: lastDayOfMonth))
-          }
-          return data
-  }
+    func returnYearData(year: Date) -> [(completed: Int, total: Int)] {
+        var data = [(completed: Int, total: Int)]()
+        
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: year)
+        
+        for i in 1 ... 12 {
+            let firstDayOfMonth = calendar.date(from: DateComponents(year: year, month: i, day: 1))!
+            let lastDayComponents = DateComponents(month: 1, day: -1)
+            let lastDayOfMonth = calendar.date(byAdding: lastDayComponents, to: firstDayOfMonth)!
+            data.append(returnDataBetweenDates(first: firstDayOfMonth, last: lastDayOfMonth))
+        }
+        return data
+    }
 
-
-func dataForDates(first: Date, last: Date) -> (Int, Int) {
-          let goals = dataManager.returnGoalsBetweenDate(from: first, to: last)
-          let goalsCompleted =  goals.filter { (goal) -> Bool in
-              return goal.completed == true
-          }.count
+func returnDataBetweenDates(first: Date, last: Date) -> (Int, Int) {
     
-          return (goalsCompleted, goals.count)
+          let goals = dataManager.returnGoalsBetweenDate(from: first, to: last)
+          let completedGoals = goals.filter { $0.completed == true }.count
+    
+          return (completedGoals, goals.count)
       }
 
 }
+
