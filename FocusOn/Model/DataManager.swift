@@ -554,7 +554,10 @@ class DataManager {
                 
                }
             
-            date = Date()
+            // date = Date()
+            
+            date = dateManager.startOfDay(for: Date())
+            
             oneDay = Double(i * 3600 * 24)
             date.addTimeInterval(-oneDay )
             

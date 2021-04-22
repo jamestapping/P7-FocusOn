@@ -21,13 +21,18 @@ class DateManager {
     
     func dateAsString(for date: Date) -> String {
         let dateFormatter = DateFormatter()
-        // dateFormatter.dateStyle = .long
         dateFormatter.timeZone = TimeZone.current
         dateFormatter.timeStyle = .none
         dateFormatter.dateFormat = date.dateFormatWithSuffix()
-        // dateFormatter.setLocalizedDateFormatFromTemplate("EEEEd")
         
         return dateFormatter.string(from: date)
+    }
+    
+    func firstDayOfWeek(for date: Date) -> Date{
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        let difference = TimeInterval((2 - weekday) * 24 * 3600)
+        return startOfDay(for: date.addingTimeInterval(difference))
     }
 }
 
