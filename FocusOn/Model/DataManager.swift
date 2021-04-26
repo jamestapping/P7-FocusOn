@@ -520,6 +520,8 @@ class DataManager {
         
         var goalCounter = 0
         
+        date = dateManager.startOfDay(for: Date())
+        
         // Create 55 days worth of goals
         
         for i in 1 ... 55 {
@@ -536,6 +538,7 @@ class DataManager {
                     // give all created goals for this day the same date
                 
                     goals[goalCounter].date = date
+                    
                     updateGoal(goal: goals[goalCounter])
                 
                     // createNewTask(goalID: newGoalId)
@@ -554,7 +557,6 @@ class DataManager {
                 
                }
             
-            // date = Date()
             
             date = dateManager.startOfDay(for: Date())
             

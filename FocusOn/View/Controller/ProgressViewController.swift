@@ -14,7 +14,18 @@ class ProgressViewController: UIViewController {
     let blueGray = UIColor(named: "BlueGray")
     let serenity = UIColor(named: "Serenity")
     
+    
+    let dateManager = DateManager()
     let statsHelper = ProgressStatsHelper()
+    
+    var week = Date()
+    var month = Date()
+    var year = Date()
+    
+    var maxYValue = 0
+    
+    
+    @IBOutlet weak var dateDisplay: UILabel!
     
     @IBOutlet weak var barChartView: BarChartView!
     
@@ -26,13 +37,19 @@ class ProgressViewController: UIViewController {
         
         case 0:
             
+            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+            
             weekDisplay()
             
         case 1:
             
-            print ("Case 1 Month Day")
+            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
+            
+            monthDisplay()
         
         case 2:
+            
+            dateDisplay.text = statsHelper.buildYearLabel(date: year)
 
             yearDisplay()
             
@@ -40,6 +57,107 @@ class ProgressViewController: UIViewController {
             
             break
         }
+        
+    }
+    
+    @IBAction func leftButton(_ sender: Any) {
+        
+        switch displayChoice.selectedSegmentIndex {
+        
+        case 0:
+            
+            week -= TimeInterval(7 * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+            
+            weekDisplay()
+            
+        case 1:
+            
+            // Get current month
+            
+            // get number of days in month
+            
+            let modifiedMonth = Calendar.current.date(byAdding: .month, value: -1, to: month)!
+            
+            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: modifiedMonth)
+            
+            print ("Using ", numberOfDaysInMonth, "number of days in month")
+            
+            month -= TimeInterval(numberOfDaysInMonth * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
+            
+            monthDisplay()
+            
+        case 2:
+            
+            year -= TimeInterval(365 * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildYearLabel(date: year)
+            
+            yearDisplay()
+            
+        default:
+            break
+        }
+        
+        
+        
+    }
+    
+    @IBAction func rightButton(_ sender: Any) {
+        
+        switch displayChoice.selectedSegmentIndex {
+        
+        case 0:
+        
+            week += TimeInterval(7 * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+            
+            weekDisplay()
+            
+        case 1:
+            
+            // Get current month
+            
+            // get number of days in month
+            
+            let modifiedMonth = Calendar.current.date(byAdding: .month, value: +1, to: month)!
+            
+            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: modifiedMonth)
+            
+            print ("Using ", numberOfDaysInMonth, "number of days in month")
+            
+            month += TimeInterval(numberOfDaysInMonth * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
+            
+            monthDisplay()
+        
+            
+        case 2:
+            
+            year += TimeInterval(365 * 24 * 3600)
+            
+            dateDisplay.text = statsHelper.buildYearLabel(date: year)
+            
+            yearDisplay()
+            
+        default:
+            break
+        }
+        
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+        
+        weekDisplay()
         
     }
     
@@ -51,11 +169,11 @@ class ProgressViewController: UIViewController {
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
-        setData()
+        graphSetup()
         
     }
     
-    func setData() {
+    func graphSetup() {
 
         let legend = barChartView.legend
         legend.horizontalAlignment = .left
@@ -84,12 +202,20 @@ class ProgressViewController: UIViewController {
     
     func weekDisplay() {
         
+        displayChoice.selectedSegmentIndex = 0
+        
         var completedValues = [BarChartDataEntry]()
         var totalValues = [BarChartDataEntry]()
         
         var data: [(completed: Int, total: Int)] = []
         
-        data = statsHelper.returnWeekData(week: Date())
+        var temp: [Int] = []
+        
+        data = statsHelper.returnWeekData(week: week)
+        
+        for i in 0 ... data.count - 1 { temp.append(data[i].total) }
+        
+        maxYValue = temp.max()!
      
         print ("Week data count", data.count)
         
@@ -105,12 +231,19 @@ class ProgressViewController: UIViewController {
             
         }
         
+        print ("maxYValue", maxYValue)
+        
         let xAxis = barChartView.xAxis
         xAxis.labelCount = 7
+        xAxis.labelFont = UIFont.init(name: "Helvetica Neue", size: 12)!
         
         let xAxisLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
         
+        let leftAxis = barChartView.leftAxis
+        
+        leftAxis.labelCount = maxYValue
+        leftAxis.axisMaximum = Double(maxYValue) 
+
         barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xAxisLabels)
         barChartView.xAxis.granularity = 1
         
@@ -133,15 +266,77 @@ class ProgressViewController: UIViewController {
         
     }
     
+    func monthDisplay() {
+        
+        var completedValues = [BarChartDataEntry]()
+        var totalValues = [BarChartDataEntry]()
+        var xAxisLabels = [String]()
+        
+        var temp: [Int] = []
+        
+        let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: month)
+        
+        var data: [(completed: Int, total: Int)] = []
+        
+        data = statsHelper.returnMonthData(date: month)
+        
+        for i in 0 ... data.count - 1 { temp.append(data[i].total) }
+        
+        maxYValue = temp.max()!
+        
+        for i in 0 ... data.count - 1 {
+            
+            completedValues.append(BarChartDataEntry(x: Double(i), y: Double(data[i].completed)))
+            totalValues.append(BarChartDataEntry(x: Double(i), y: Double(data[i].total)))
+            
+        }
+        
+        let xAxis = barChartView.xAxis
+        xAxis.labelCount = numberOfDaysInMonth
+        xAxis.labelFont = UIFont.init(name: "Helvetica Neue", size: 6)!
+        
+        let days = Array(1...numberOfDaysInMonth)
+        xAxisLabels = days.map{ String($0) }
+
+        let leftAxis = barChartView.leftAxis
+        leftAxis.labelCount = maxYValue
+        leftAxis.axisMaximum = Double(maxYValue)
+        
+        barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xAxisLabels)
+        barChartView.xAxis.granularity = 1
+        
+        let completedSet = BarChartDataSet(entries: completedValues, label: "Completed")
+        let totalSet = BarChartDataSet(entries: totalValues, label: "Total")
+        
+        completedSet.drawValuesEnabled = false
+        totalSet.drawValuesEnabled = false
+        
+        completedSet.setColor(serenity!)
+        totalSet.setColor(blueGray!)
+        
+        let chartData =  BarChartData(dataSets: [completedSet,totalSet])
+        chartData.barWidth = Double(0.40)
+        barChartView.data = chartData
+        barChartView.rightAxis.enabled = false
+        barChartView.groupBars(fromX: -0.5, groupSpace: Double(0.20), barSpace: Double(0.00))
+        barChartView.invalidateIntrinsicContentSize()
+        barChartView.animate(yAxisDuration: 0.5, easingOption: .easeInCubic)
+        
+    }
+    
     
     func yearDisplay() {
         
         var completedValues = [BarChartDataEntry]()
         var totalValues = [BarChartDataEntry]()
-        
         var data: [(completed: Int, total: Int)] = []
+        var temp: [Int] = []
         
-        data = statsHelper.returnYearData(year: Date())
+        data = statsHelper.returnYearData(year: year)
+        
+        for i in 0 ... data.count - 1 { temp.append(data[i].total) }
+        
+        maxYValue = temp.max()!
         
         for i in 0 ... data.count - 1 {
             
@@ -154,7 +349,12 @@ class ProgressViewController: UIViewController {
         
         let xAxis = barChartView.xAxis
         xAxis.labelCount = 12
+        xAxis.labelFont = UIFont.init(name: "Helvetica Neue", size:12)!
 
+        let leftAxis = barChartView.leftAxis
+        leftAxis.labelCount = 10
+        leftAxis.axisMaximum = Double(maxYValue)
+        
         barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xAxisLabels)
         barChartView.xAxis.granularity = 1
         

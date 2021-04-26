@@ -55,6 +55,15 @@ class HistoryTableViewController: UITableViewController {
         
         goals = dataManager.returnAllGoalsSortedByDate()
         
+        
+        // Quick and dirty Debug
+        
+        for i in 0 ..< goals.count {
+            
+            print (goals[i].date as Any)
+            
+        }
+        
         buildHistory()
         buildDaysHeaders()
         buildGoalCompletionStats()

@@ -22,6 +22,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // UITabBar.appearance().clipsToBounds = true
         // UITabBar.appearance().shadowImage = nil
         
+        // Work in UTC to avoid DST
+        
+        if let utcZone = NSTimeZone(abbreviation: "UTC") {
+            NSTimeZone.default = utcZone as TimeZone
+            
+        }
+        
         return true
     }
 

@@ -33,6 +33,7 @@ class TodayTableViewController: UITableViewController {
     let midnightBlue = UIColor(named: "MidnightBlue")
     
     var dataManager = DataManager()
+    var dateManager = DateManager()
     
     var goals = [Goal]()
     
@@ -54,6 +55,8 @@ class TodayTableViewController: UITableViewController {
         print ("Today View  - ViewDidAppear")
         
        updateTableView()
+        
+        print (dateManager.startOfDay(for: Date()))
         
     }
     

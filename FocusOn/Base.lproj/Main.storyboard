@@ -479,39 +479,94 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oah-2W-pat" customClass="BarChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <rect key="frame" x="0.0" y="189" width="414" height="624"/>
+                                <color key="backgroundColor" name="BabyBlue"/>
+                            </view>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5rr-f0-W1P">
+                                <rect key="frame" x="119" y="88" width="176" height="45"/>
+                                <color key="backgroundColor" name="BlueGray"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="GBK-0S-ft5"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Week"/>
+                                    <segment title="Month"/>
+                                    <segment title="Year"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" name="BabyBlue"/>
+                                <connections>
+                                    <action selector="displayChoiceChanged:" destination="HgN-7e-a4Q" eventType="valueChanged" id="XUs-mT-6rC"/>
+                                </connections>
+                            </segmentedControl>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QHH-lS-7pp">
+                                <rect key="frame" x="117" y="135" width="180" height="44"/>
                                 <subviews>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="5rr-f0-W1P">
-                                        <rect key="frame" x="119" y="5" width="176" height="32"/>
-                                        <segments>
-                                            <segment title="Week"/>
-                                            <segment title="Month"/>
-                                            <segment title="Year"/>
-                                        </segments>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="17B-fJ-30h" userLabel="Left Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="46" height="43.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="46" id="7Jg-Tx-lDW"/>
+                                            <constraint firstAttribute="height" constant="46" id="GB7-1y-l0r"/>
+                                        </constraints>
+                                        <color key="tintColor" name="MidnightBlue"/>
+                                        <state key="normal" backgroundImage="arrowtriangle.left.square.fill" catalog="system"/>
                                         <connections>
-                                            <action selector="displayChoiceChanged:" destination="HgN-7e-a4Q" eventType="valueChanged" id="XUs-mT-6rC"/>
+                                            <action selector="leftButton:" destination="HgN-7e-a4Q" eventType="touchUpInside" id="cPQ-gI-S4N"/>
                                         </connections>
-                                    </segmentedControl>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LtQ-IS-u5i" userLabel="Right Button">
+                                        <rect key="frame" x="134" y="0.0" width="46" height="43.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="46" id="dAM-cn-JJw"/>
+                                            <constraint firstAttribute="height" constant="46" id="foi-hj-yb5"/>
+                                        </constraints>
+                                        <color key="tintColor" name="MidnightBlue"/>
+                                        <state key="normal" backgroundImage="arrowtriangle.right.square.fill" catalog="system"/>
+                                        <connections>
+                                            <action selector="rightButton:" destination="HgN-7e-a4Q" eventType="touchUpInside" id="2Mk-VQ-8tl"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2021" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0f-W0-3ug">
+                                        <rect key="frame" x="69.5" y="0.0" width="41" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="2Yd-99-mvx"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="awX-Md-xSy"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="18"/>
+                                        <color key="textColor" name="MidnightBlue"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" name="BabyBlue"/>
                                 <constraints>
-                                    <constraint firstItem="5rr-f0-W1P" firstAttribute="centerX" secondItem="oah-2W-pat" secondAttribute="centerX" id="6Wt-co-Sgj"/>
-                                    <constraint firstItem="5rr-f0-W1P" firstAttribute="top" secondItem="oah-2W-pat" secondAttribute="top" constant="5" id="HoF-Hh-cQQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="LtQ-IS-u5i" secondAttribute="trailing" id="3il-bU-PFR"/>
+                                    <constraint firstItem="LtQ-IS-u5i" firstAttribute="centerY" secondItem="QHH-lS-7pp" secondAttribute="centerY" id="bxV-QX-3hX"/>
+                                    <constraint firstItem="r0f-W0-3ug" firstAttribute="centerY" secondItem="QHH-lS-7pp" secondAttribute="centerY" id="h4O-Fu-fXG"/>
+                                    <constraint firstItem="17B-fJ-30h" firstAttribute="centerY" secondItem="QHH-lS-7pp" secondAttribute="centerY" id="l4r-Mi-3cK"/>
+                                    <constraint firstAttribute="width" constant="180" id="oBj-un-5Tu"/>
+                                    <constraint firstItem="17B-fJ-30h" firstAttribute="leading" secondItem="QHH-lS-7pp" secondAttribute="leading" id="qED-fM-mr5"/>
+                                    <constraint firstAttribute="height" constant="44" id="rki-SK-Kvr"/>
+                                    <constraint firstItem="r0f-W0-3ug" firstAttribute="centerX" secondItem="QHH-lS-7pp" secondAttribute="centerX" id="xyr-Sk-1BS"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="OEB-J2-VKr"/>
                         <color key="backgroundColor" name="BabyBlue"/>
                         <constraints>
-                            <constraint firstItem="oah-2W-pat" firstAttribute="trailing" secondItem="OEB-J2-VKr" secondAttribute="trailing" id="AcN-rs-ns5"/>
-                            <constraint firstItem="oah-2W-pat" firstAttribute="top" secondItem="OEB-J2-VKr" secondAttribute="top" id="XUn-IQ-3Jv"/>
-                            <constraint firstItem="oah-2W-pat" firstAttribute="bottom" secondItem="OEB-J2-VKr" secondAttribute="bottom" id="eI9-Gm-cIP"/>
-                            <constraint firstItem="oah-2W-pat" firstAttribute="leading" secondItem="OEB-J2-VKr" secondAttribute="leading" id="uSy-tm-99p"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="leading" secondItem="OEB-J2-VKr" secondAttribute="leading" id="02u-AO-YhG"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="bottom" secondItem="OEB-J2-VKr" secondAttribute="bottom" id="KiY-mg-cde"/>
+                            <constraint firstItem="QHH-lS-7pp" firstAttribute="top" secondItem="5rr-f0-W1P" secondAttribute="bottom" constant="3" id="LdA-yf-U4Q"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="trailing" secondItem="OEB-J2-VKr" secondAttribute="trailing" id="LsT-TA-Rfg"/>
+                            <constraint firstAttribute="trailing" secondItem="oah-2W-pat" secondAttribute="trailing" id="eqf-rr-hhh"/>
+                            <constraint firstItem="oah-2W-pat" firstAttribute="top" secondItem="QHH-lS-7pp" secondAttribute="bottom" constant="10" id="mxX-cw-i32"/>
+                            <constraint firstItem="5rr-f0-W1P" firstAttribute="centerX" secondItem="2wf-Go-6nH" secondAttribute="centerX" id="nO7-3P-Dkm"/>
+                            <constraint firstItem="5rr-f0-W1P" firstAttribute="top" secondItem="OEB-J2-VKr" secondAttribute="top" id="qjw-gd-h6z"/>
+                            <constraint firstItem="QHH-lS-7pp" firstAttribute="centerX" secondItem="2wf-Go-6nH" secondAttribute="centerX" id="tF9-XL-hhD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="FocusOn Progress" id="bfF-Gb-bbJ"/>
                     <connections>
                         <outlet property="barChartView" destination="oah-2W-pat" id="fbW-o1-4hE"/>
+                        <outlet property="dateDisplay" destination="r0f-W0-3ug" id="c31-2J-9gQ"/>
                         <outlet property="displayChoice" destination="5rr-f0-W1P" id="eCS-o0-UfI"/>
                     </connections>
                 </viewController>
@@ -581,6 +636,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrowtriangle.left.square.fill" catalog="system" width="128" height="114"/>
+        <image name="arrowtriangle.right.square.fill" catalog="system" width="128" height="114"/>
         <image name="chart.bar.xaxis" catalog="system" width="128" height="98"/>
         <image name="checkmark.rectangle" catalog="system" width="128" height="93"/>
         <image name="circle" catalog="system" width="128" height="121"/>
