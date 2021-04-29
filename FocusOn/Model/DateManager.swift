@@ -51,6 +51,17 @@ class DateManager {
         let returnDate = Calendar(identifier: .gregorian).date(byAdding: components, to: startOfMonth)!
         return returnDate
         
+    }
+    
+    func firstDayOfYear (for date: Date) -> Date {
+        
+        let calendar = Calendar.current
+        
+        let year = Calendar.current.component(.year, from: date)
+        
+        let firstDayOfYear = calendar.date(from: DateComponents(year: year , month: 1, day: 1))!
+        
+        return firstDayOfYear
         
     }
     

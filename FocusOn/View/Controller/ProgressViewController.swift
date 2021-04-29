@@ -9,11 +9,6 @@ import UIKit
 import Charts
 
 class ProgressViewController: UIViewController {
-
-    let midnightBlue = UIColor(named: "MidnightBlue")
-    let blueGray = UIColor(named: "BlueGray")
-    let serenity = UIColor(named: "Serenity")
-    
     
     let dateManager = DateManager()
     let statsHelper = ProgressStatsHelper()
@@ -24,11 +19,12 @@ class ProgressViewController: UIViewController {
     
     var maxYValue = 0
     
+    var count = 0
+    
     
     @IBOutlet weak var dateDisplay: UILabel!
-    
+    @IBOutlet weak var noDataLabel: UILabel!
     @IBOutlet weak var barChartView: BarChartView!
-    
     @IBOutlet weak var displayChoice: UISegmentedControl!
     
     @IBAction func displayChoiceChanged(_ sender: UISegmentedControl) {
@@ -37,20 +33,17 @@ class ProgressViewController: UIViewController {
         
         case 0:
             
-            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
-            
+            manageNoDataLabelWeek()
             weekDisplay()
             
         case 1:
             
-            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
-            
+            manageNoDataLabelMonth()
             monthDisplay()
         
         case 2:
             
-            dateDisplay.text = statsHelper.buildYearLabel(date: year)
-
+            manageNoDataLabelYear()
             yearDisplay()
             
         default:
@@ -68,25 +61,18 @@ class ProgressViewController: UIViewController {
             
             week -= TimeInterval(7 * 24 * 3600)
             
-            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+            manageNoDataLabelWeek()
             
             weekDisplay()
             
         case 1:
             
-            // Get current month
-            
-            // get number of days in month
-            
-            let modifiedMonth = Calendar.current.date(byAdding: .month, value: -1, to: month)!
-            
-            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: modifiedMonth)
-            
-            print ("Using ", numberOfDaysInMonth, "number of days in month")
+            let previousMonth = Calendar.current.date(byAdding: .month, value: -1, to: month)!
+            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: previousMonth)
             
             month -= TimeInterval(numberOfDaysInMonth * 24 * 3600)
             
-            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
+            manageNoDataLabelMonth()
             
             monthDisplay()
             
@@ -94,7 +80,7 @@ class ProgressViewController: UIViewController {
             
             year -= TimeInterval(365 * 24 * 3600)
             
-            dateDisplay.text = statsHelper.buildYearLabel(date: year)
+            manageNoDataLabelYear()
             
             yearDisplay()
             
@@ -114,25 +100,18 @@ class ProgressViewController: UIViewController {
         
             week += TimeInterval(7 * 24 * 3600)
             
-            dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+            manageNoDataLabelWeek()
             
             weekDisplay()
             
         case 1:
             
-            // Get current month
-            
-            // get number of days in month
-            
-            let modifiedMonth = Calendar.current.date(byAdding: .month, value: +1, to: month)!
-            
-            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: modifiedMonth)
-            
-            print ("Using ", numberOfDaysInMonth, "number of days in month")
+            let nextMonth = Calendar.current.date(byAdding: .month, value: +1, to: month)!
+            let numberOfDaysInMonth = dateManager.numberOfDaysInMonth(date: nextMonth)
             
             month += TimeInterval(numberOfDaysInMonth * 24 * 3600)
             
-            dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
+            manageNoDataLabelMonth()
             
             monthDisplay()
         
@@ -140,8 +119,7 @@ class ProgressViewController: UIViewController {
         case 2:
             
             year += TimeInterval(365 * 24 * 3600)
-            
-            dateDisplay.text = statsHelper.buildYearLabel(date: year)
+            manageNoDataLabelYear()
             
             yearDisplay()
             
@@ -155,8 +133,6 @@ class ProgressViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
-        
         weekDisplay()
         
     }
@@ -169,8 +145,93 @@ class ProgressViewController: UIViewController {
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
+        
+        // Add tap capability to dateLabel
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapDateLabel))
+        dateDisplay.addGestureRecognizer(tap)
+        
+        
         graphSetup()
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        print ("Progress View  - ViewDidAppear")
+        
+        manageNoDataLabelWeek()
+        
+    }
+    
+    @objc func tapDateLabel() {
+        
+        print ("Label Tapped")
+        
+        switch displayChoice.selectedSegmentIndex {
+        
+        case 0:
+            
+            week = dateManager.firstDayOfWeek(for: dateManager.today)
+            
+            manageNoDataLabelWeek()
+            
+            weekDisplay()
+            
+        case 1:
+            
+            month = dateManager.firstDayOfMonth(for: dateManager.today)
+            
+            manageNoDataLabelMonth()
+            
+            monthDisplay()
+            
+            
+        case 2:
+            
+            year = dateManager.firstDayOfYear(for: dateManager.today)
+        
+            manageNoDataLabelYear()
+            
+            yearDisplay()
+        
+        default:
+            break
+        }
+        
+    }
+    
+    // Manage No Data Label Functions
+    
+    func manageNoDataLabelWeek() {
+        
+        let data = statsHelper.returnWeekData(week: week)
+        for i in 0 ..< data.count { count += data[i].total }
+        noDataLabel.isHidden = count != 0
+        dateDisplay.textColor = count == 0 ? UIColor.blueGray : UIColor.midnightBlue
+        
+        count = 0
+    }
+    
+    func manageNoDataLabelMonth() {
+        
+        let data = statsHelper.returnMonthData(date: month)
+        for i in 0 ..< data.count { count += data[i].total }
+        noDataLabel.isHidden = count != 0
+        dateDisplay.textColor = count == 0 ? UIColor.blueGray : UIColor.midnightBlue
+        
+        count = 0
+    }
+    
+    func manageNoDataLabelYear() {
+        
+        let data = statsHelper.returnYearData(year: year)
+        for i in 0 ..< data.count { count += data[i].total }
+        noDataLabel.isHidden = count != 0
+        dateDisplay.textColor = count == 0 ? UIColor.blueGray : UIColor.midnightBlue
+        
+        count = 0
     }
     
     func graphSetup() {
@@ -202,6 +263,13 @@ class ProgressViewController: UIViewController {
     
     func weekDisplay() {
         
+        enum daysOfWeek: CaseIterable {
+            
+            case Mon, Tue, Wed, Thu, Fri, Sat, Sun
+        }
+        
+        dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
+        
         displayChoice.selectedSegmentIndex = 0
         
         var completedValues = [BarChartDataEntry]()
@@ -216,22 +284,15 @@ class ProgressViewController: UIViewController {
         for i in 0 ... data.count - 1 { temp.append(data[i].total) }
         
         maxYValue = temp.max()!
-     
-        print ("Week data count", data.count)
         
         for i in 0 ... data.count - 1 {
             
             completedValues.append(BarChartDataEntry(x: Double(i), y: Double(data[i].completed)))
             
-            // print (data[i].completed)
-            
             totalValues.append(BarChartDataEntry(x: Double(i), y: Double(data[i].total)))
-            
-            // print (data[i].total)
+
             
         }
-        
-        print ("maxYValue", maxYValue)
         
         let xAxis = barChartView.xAxis
         xAxis.labelCount = 7
@@ -246,6 +307,7 @@ class ProgressViewController: UIViewController {
 
         barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xAxisLabels)
         barChartView.xAxis.granularity = 1
+        barChartView.isUserInteractionEnabled = false
         
         let completedSet = BarChartDataSet(entries: completedValues, label: "Completed")
         let totalSet = BarChartDataSet(entries: totalValues, label: "Total")
@@ -253,8 +315,8 @@ class ProgressViewController: UIViewController {
         completedSet.drawValuesEnabled = false
         totalSet.drawValuesEnabled = false
         
-        completedSet.setColor(serenity!)
-        totalSet.setColor(blueGray!)
+        completedSet.setColor(UIColor.serenity!)
+        totalSet.setColor(UIColor.blueGray!)
         
         let chartData =  BarChartData(dataSets: [completedSet,totalSet])
         chartData.barWidth = Double(0.43)
@@ -267,6 +329,8 @@ class ProgressViewController: UIViewController {
     }
     
     func monthDisplay() {
+        
+        dateDisplay.text = statsHelper.buildFirstDayOfMonthLabel(date: month)
         
         var completedValues = [BarChartDataEntry]()
         var totalValues = [BarChartDataEntry]()
@@ -311,8 +375,8 @@ class ProgressViewController: UIViewController {
         completedSet.drawValuesEnabled = false
         totalSet.drawValuesEnabled = false
         
-        completedSet.setColor(serenity!)
-        totalSet.setColor(blueGray!)
+        completedSet.setColor(UIColor.serenity!)
+        totalSet.setColor(UIColor.blueGray!)
         
         let chartData =  BarChartData(dataSets: [completedSet,totalSet])
         chartData.barWidth = Double(0.40)
@@ -326,6 +390,8 @@ class ProgressViewController: UIViewController {
     
     
     func yearDisplay() {
+        
+        dateDisplay.text = statsHelper.buildYearLabel(date: year)
         
         var completedValues = [BarChartDataEntry]()
         var totalValues = [BarChartDataEntry]()
@@ -364,8 +430,8 @@ class ProgressViewController: UIViewController {
         completedSet.drawValuesEnabled = false
         totalSet.drawValuesEnabled = false
         
-        completedSet.setColor(serenity!)
-        totalSet.setColor(blueGray!)
+        completedSet.setColor(UIColor.serenity!)
+        totalSet.setColor(UIColor.blueGray!)
         
         let chartData =  BarChartData(dataSets: [completedSet,totalSet])
         chartData.barWidth = Double(0.43)

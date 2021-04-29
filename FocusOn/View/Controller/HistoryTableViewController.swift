@@ -21,9 +21,6 @@ class HistoryTableViewController: UITableViewController {
         
     }
     
-    let blueGray = UIColor(named: "BlueGray")
-    let midnightBlue = UIColor(named: "MidnightBlue")
-    
     var dataManager = DataManager()
     var dateManager = DateManager()
     
@@ -46,7 +43,7 @@ class HistoryTableViewController: UITableViewController {
         // Change navigation bar titles font
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
-        
+    
         
     }
     
@@ -207,9 +204,9 @@ class HistoryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
 
             let headerView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0))
-            headerView.backgroundColor = blueGray
+            headerView.backgroundColor = UIColor.blueGray
             let label = UILabel(frame: CGRect(x: 0, y: 4, width: UIScreen.main.bounds.width, height: 20))
-            label.textColor = midnightBlue
+            label.textColor = UIColor.midnightBlue
             label.font =  UIFont(name: "Helvetica Neue", size: 17)
 
             let totalForMonth = completedStats[section].totalForMonth
@@ -223,18 +220,6 @@ class HistoryTableViewController: UITableViewController {
             return headerView
 
         }
-    
-
-//    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//
-//        // return sectionHeader.contains(section) ? 60 : 0
-//
-//        return  60
-//    }
-    
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return section == 1 ? nil : nil
-//    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         

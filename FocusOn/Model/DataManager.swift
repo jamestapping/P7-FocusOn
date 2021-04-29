@@ -522,9 +522,9 @@ class DataManager {
         
         date = dateManager.startOfDay(for: Date())
         
-        // Create 55 days worth of goals
+        // Create 80 days worth of goals
         
-        for i in 1 ... 55 {
+        for i in 1 ... 80 {
             
             // Create up to 5 goals per day
             
@@ -540,8 +540,6 @@ class DataManager {
                     goals[goalCounter].date = date
                     
                     updateGoal(goal: goals[goalCounter])
-                
-                    // createNewTask(goalID: newGoalId)
                 
                     goalCounter += 1
 

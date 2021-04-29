@@ -147,7 +147,6 @@ class SettingsTableViewController: UITableViewController {
                     }
             }
     }
-
 }
 
 

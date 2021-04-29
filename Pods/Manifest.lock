@@ -2,17 +2,21 @@ PODS:
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
+  - SAConfettiView (0.1.8)
 
 DEPENDENCIES:
   - Charts
+  - SAConfettiView
 
 SPEC REPOS:
   trunk:
     - Charts
+    - SAConfettiView
 
 SPEC CHECKSUMS:
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
+  SAConfettiView: c87031a2280659261b730fce3669fb10e73636ee
 
-PODFILE CHECKSUM: f62ed05315338535eb3612427fc8e3bcab3853a8
+PODFILE CHECKSUM: 712ae84c59cb2b4f0c8dc21c5bd4cfb1b6f3810e
 
 COCOAPODS: 1.10.1

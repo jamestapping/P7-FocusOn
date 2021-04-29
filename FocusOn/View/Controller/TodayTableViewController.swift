@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SAConfettiView
 
 class TodayTableViewController: UITableViewController {
     
@@ -25,12 +26,10 @@ class TodayTableViewController: UITableViewController {
             let newGoalIndexPath = IndexPath(row: 0, section: self.tableView.numberOfSections - 1)
             self.tableView.scrollToRow(at: newGoalIndexPath, at: .top, animated: true)
         }
-        
     }
     
     let untick = UIImage(named: "untick-gray")
     let untickWhite = UIImage(named: "untick-white")
-    let midnightBlue = UIColor(named: "MidnightBlue")
     
     var dataManager = DataManager()
     var dateManager = DateManager()
@@ -42,11 +41,7 @@ class TodayTableViewController: UITableViewController {
         
         print ("Today View  - ViewDidLoad")
         
-
         configure()
-        
-        // updateTableView()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -54,11 +49,9 @@ class TodayTableViewController: UITableViewController {
         
         print ("Today View  - ViewDidAppear")
         
-       updateTableView()
-        
-        print (dateManager.startOfDay(for: Date()))
-        
+        updateTableView()
     }
+    
     
     func configure() {
         
@@ -67,8 +60,6 @@ class TodayTableViewController: UITableViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
         UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: UIFont(name: "Helvetica Neue", size: 15)!], for: UIControl.State.normal)
-
-
 
         }
     
@@ -86,30 +77,50 @@ class TodayTableViewController: UITableViewController {
         
     }
     
+    func showWellDoneAlert() {
+        
+        // Display Confetti
+        
+        let confettiView = SAConfettiView(frame: view.bounds)
+        confettiView.type = .Star
+        view.addSubview(confettiView)
+        confettiView.startConfetti()
+        
+        showAlert(title: "FocusOn",
+                       message: "Well Done!",
+                       alertStyle: .alert,
+                       actionTitles: ["Ok"],
+                       actionStyles: [.default],
+                       actions: [
+                       
+                        { []_ in
+                        
+                            // action /  Stop confetti View
+                            
+                            confettiView.stopConfetti()
+                            confettiView.removeFromSuperview()
+                        }
+                       ])
+    }
 
     // MARK: - Table view data source
-
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
        
         return tableView.estimatedRowHeight
     }
     
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         return goals.count
     }
     
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         let rowsInSection = dataManager.fetchTasksforGoalUUID(goalID: goals[section].goalId!).count
         
         return rowsInSection + 2
-    
     }
-    
     
     // Disable edit for info cell and last add task cell
     
@@ -125,7 +136,6 @@ class TodayTableViewController: UITableViewController {
         default:
             return true
         }
-        
     }
     
     // Custom Swipe to delete tasks and Goals
@@ -159,7 +169,7 @@ class TodayTableViewController: UITableViewController {
                 completion(true)
             }
         
-        delete.backgroundColor = midnightBlue
+            delete.backgroundColor = UIColor.midnightBlue
          
             let config = UISwipeActionsConfiguration(actions: [delete])
             // config.performsFirstActionWithFullSwipe = true
@@ -179,11 +189,9 @@ class TodayTableViewController: UITableViewController {
     func deleteGoalCell(indexPath: IndexPath) {
         
         let goalID = goals[indexPath.section].goalId
-        
         dataManager.deleteGoal(goalId: goalID!)
         
     }
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -277,21 +285,10 @@ class TodayTableViewController: UITableViewController {
             
             return cell
         }
-    
-    }
-    
-    func scrollToBottom(){
-        
-        print ("Running Scroll to Bottom")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            let indexPath = IndexPath(row: 7, section: 1)
-            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
-        }
     }
 }
 
 extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate {
-    
     
     func moveToBottomOfTableView(cell: TodayTaskTableViewCell) {
         
@@ -303,17 +300,12 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                 
-                print ("scrollToBottomRow")
-                
                 let newGoalIndexPath = IndexPath(row: 0, section: self.tableView.numberOfSections - 1)
                 self.tableView.scrollToRow(at: newGoalIndexPath, at: .top, animated: true)
             }
-            
         }
-        
     }
 
-    
     func updateCellHeight() {
         
         tableView.beginUpdates()
@@ -321,9 +313,6 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
     }
     
     func updateGoalCell(cell: TodayGoalTableViewCell) {
-        
-        
-        print ("Updating Goal cell - the array")
         
         let indexPath = self.tableView.indexPath(for: cell)!
         let goalToUpdate = indexPath.section
@@ -345,9 +334,42 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         goals[goalToUpdate].completed = cell.goalToggleButton.isSelected
 
         dataManager.updateGoal(goal: goals[goalToUpdate])
+        
+        if goals[goalToUpdate].completed == true {
+
+            print ("*** Goal completed so updating all tasks")
+
+            // Get all tasks for the goal and mark them as completed
+
+            let goalID = goals[goalToUpdate].goalId
+            let tasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
+            
+            for i in 0 ..< tasks.count - 1 {
+                
+                tasks[i].completed = true
+             
+                dataManager.updateTask(task: tasks[i], completed: true)
+            }
+        
+            tableView.reloadData()
+            
+            showWellDoneAlert()
+            
+            // Debug
+            
+            print ("*** updateGoalCellCompletion says : ")
+            
+            let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
+            
+            print ("Goal completed", goals[goalToUpdate].completed )
+            
+            for i in 0 ..< testTasks.count  {
+                
+                print ("Task",i , testTasks[i].completed)
+                
+            }
+        }
     }
-    
-    
     
     func createNewTask(cell: TodayTaskTableViewCell?) {
         
@@ -365,20 +387,17 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         }
         
         updateTableView()
-        
     }
     
     func updateTaskcell(task: Task) {
         
         dataManager.updateTask(task: task)
-        
     }
     
     func updateTaskCell(cell: TodayTaskTableViewCell?, name: String) {
         
         guard let cell = cell, let indexPath = self.tableView.indexPath(for: cell) else { return }
             
-        
         let goalID = goals[indexPath.section].goalId
         let tasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
         let task = tasks[indexPath.row - 2]
@@ -388,16 +407,14 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         // only remove tasks if field is empty and this isn't the last row
             
         if task.name == "" && tasks.count != 1  {
-            
             dataManager.deleteTask(taskId: task.taskId!)
-            
         }
-        
     }
     
     func updateTaskCell(cell: TodayTaskTableViewCell, completed: Bool) {
         
-        print ("Updating task cell - completed status")
+        if completed { showTaskAnimatedMessage(.success) }
+                else { showTaskAnimatedMessage(.failure) }
         
         let indexPath = self.tableView.indexPath(for: cell)!
         let goalID = goals[indexPath.section].goalId
@@ -406,9 +423,79 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         
         dataManager.updateTask(task: task, completed: completed)
         
+        // Debug
+        
+        print ("*** updateTaskCellCompletion says : ")
+        
+        let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
+        
+        print ("Goal completed", goals[indexPath.section].completed )
+        
+        for i in 0 ..< testTasks.count  {
+            
+            print ("Task",i , testTasks[i].completed)
+            
+        }
+        
+        // Check if all tasks completed
+        
+        let completedCount = tasks.filter{ $0.completed == true }.count
+        
+        print ("Completed Count", completedCount)
+        
+        print("Task Completed", task.completed)
+        
+        if completedCount == tasks.count - 1 && !goals[indexPath.section].completed  {
+            
+            showAlert(title: "FocusOn",
+                           message: "You have completed all tasks, shall I mark the goal as completed?",
+                           alertStyle: .alert,
+                           actionTitles: ["Yes","No"],
+                           actionStyles: [.default, .default],
+                           actions: [
+                           
+                            { [self]_ in
+                            
+                                // action 1 , mark goal as completed
+                                
+                                goals[indexPath.section].completed = true
+                                dataManager.updateGoal(goal: goals[indexPath.section])
+                                tableView.reloadData()
+                                
+                                showWellDoneAlert()
+                                
+                                // Debug
+                                
+                                print ("*** updateTaskCellCompletion  after question says : ")
+                                
+                                let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
+                                
+                                print ("Goal completed", goals[indexPath.section].completed )
+                                
+                                for i in 0 ..< testTasks.count  {
+                                    
+                                    print ("Task",i , testTasks[i].completed)
+                                    
+                                }
+                            },
+                            
+                            { []_ in
+                        
+                                // Action 2 - Do nothing
+                           
+                            }
+                           ])
+            
+        } else {
+            
+            // mark the goal as incomplete
+            
+            goals[indexPath.section].completed = false
+            dataManager.updateGoal(goal: goals[indexPath.section])
+            tableView.reloadData()
+        }
+        
         tableView.reloadData()
     }
-    
 }
-
 
