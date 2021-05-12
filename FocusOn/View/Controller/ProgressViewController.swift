@@ -145,7 +145,6 @@ class ProgressViewController: UIViewController {
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
         
-        
         // Add tap capability to dateLabel
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapDateLabel))
@@ -159,15 +158,11 @@ class ProgressViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        print ("Progress View  - ViewDidAppear")
-        
         manageNoDataLabelWeek()
         
     }
     
     @objc func tapDateLabel() {
-        
-        print ("Label Tapped")
         
         switch displayChoice.selectedSegmentIndex {
         

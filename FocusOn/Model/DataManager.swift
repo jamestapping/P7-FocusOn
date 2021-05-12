@@ -18,10 +18,12 @@ class DataManager {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
+    
+    // MARK:- Goal CRUD methods
+
     func createNewGoal() -> UUID {
         
         let newGoal = Goal(context: context)
-        
         newGoal.goalId = UUID()
         newGoal.date = dateManager.today
         newGoal.name = "Set your goal..."
@@ -30,6 +32,26 @@ class DataManager {
         saveContext()
 
         return newGoal.goalId!
+    }
+    
+    func deleteGoal(goalId: UUID) {
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Goal.goalId), goalId as CVarArg)
+        request.returnsObjectsAsFaults = false
+        do {
+            let result = try context.fetch(request)
+            
+           //  print ("**** datamanager deleting task")
+            
+            context.delete(result.first!)
+            
+            saveContext()
+            
+        } catch {
+            //Warning
+        }
+        
     }
     
     func updateGoal(goal: Goal) {
@@ -44,15 +66,33 @@ class DataManager {
                 
                 let fetchedGoal = result.first!
                 fetchedGoal.name = goal.name
-                // fetchedGoal.date = goal.date
                 fetchedGoal.completed = goal.completed
 
                 saveContext()
                 
-            } else { print("Fetch result was empty for specified goal id: \(String(describing: goal.goalId))") }
+            } else { print("Fetch result was empty for goal id: \(String(describing: goal.goalId))") }
             
-        } catch { print("Fetch on goal id: \(String(describing: goal.goalId)) failed. \(error)") }
+        } catch { print("Fetch on goal \(String(describing: goal.goalId)) failed. \(error)") }
         
+    }
+    
+    func returnAllGoals() -> [Goal] {
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        
+        do {
+            
+        let result = try context.fetch(request)
+            
+            return result
+        }
+        
+        catch {
+            
+            //
+        }
+        
+        return []
     }
     
     func returnGoal(goalId: UUID) -> Goal {
@@ -76,6 +116,115 @@ class DataManager {
         return Goal.init()
     }
     
+//    func getFirstGoalUUID() -> UUID{
+//
+//        let testFetchedGoalId:UUID = UUID()
+//        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+//
+//        do {
+//
+//            let result = try context.fetch(request)
+//            let fetchedGoalId = result.first?.goalId
+//
+//            return fetchedGoalId!
+//        }
+//
+//        catch {
+//
+//        }
+//
+//        return testFetchedGoalId
+//    }
+    
+    func returnGoalsBetweenDate(from:Date, to:Date) -> [Goal] {
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        
+        let predicate = NSPredicate(format: "date >= %@ AND date <= %@", dateManager.startOfDay(for: from) as NSDate, dateManager.startOfDay(for: to) as NSDate)
+        
+        request.predicate = predicate
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+        let result = try context.fetch(request)
+            
+            return result
+        }
+        
+        catch {
+            
+            // Error ?
+            
+        }
+        
+        return []
+    }
+    
+    
+    func returnTodaysGoals() -> [Goal] {
+        
+        // Get the current calendar with local time zone
+        var calendar = Calendar.current
+        calendar.timeZone = NSTimeZone.system
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+
+        // Get today's beginning & end
+        
+        let startDate = dateManager.startOfDay(for: Date())
+        
+        let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)
+        
+        let predicate = NSPredicate(format: "date >= %@ AND date < %@", startDate as NSDate, endDate! as NSDate)
+        request.predicate = predicate
+        
+        request.returnsObjectsAsFaults = false
+        
+        do {
+            
+        let result = try context.fetch(request)
+            
+            return result
+        }
+        
+        catch {
+            
+            // Error ?
+            
+        }
+        
+        return []
+    }
+
+    func returnAllGoalsSortedByDate() -> [Goal] {
+        
+        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
+        let sort = NSSortDescriptor(key: #keyPath(Goal.date), ascending: true)
+        request.sortDescriptors = [sort]
+        
+        do {
+            
+        let result = try context.fetch(request)
+            
+            return result
+        }
+        
+        catch {
+            
+            // Error ?
+            
+        }
+        
+        return []
+
+        
+    }
+    
+    // MARK:- Task CRUD methods
+    
+    
     func createNewTask (goalID: UUID) {
         
         let newTask = Task(context: context)
@@ -83,9 +232,7 @@ class DataManager {
         do {
             
             let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-
             let pred = NSPredicate(format: "%K == %@", #keyPath(Goal.goalId), goalID as CVarArg)
-            
             request.predicate = pred
             
             let result = try context.fetch(request)
@@ -152,7 +299,7 @@ class DataManager {
                 
                 let fetchedTask = result.first
                 fetchedTask?.name = task.name
-                // fetchedTask?.completed = completed
+                fetchedTask?.completed = task.completed
                 
                 saveContext()
                 
@@ -197,174 +344,7 @@ class DataManager {
         
     }
     
-    func getFirstGoalUUID() -> UUID{
-        
-        let testFetchedGoalId:UUID = UUID()
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        
-        do {
-            
-            let result = try context.fetch(request)
-            
-            let fetchedGoalId = result.first?.goalId
-            
-            print ("Fetched GoalID = ", fetchedGoalId as Any )
-            
-            return fetchedGoalId!
-        }
-        
-        catch {
-        
-        }
-        
-        return testFetchedGoalId
-    }
     
-    
-    func returnAllGoals() -> [Goal] {
-        
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        
-        do {
-            
-        let result = try context.fetch(request)
-            
-            return result
-        }
-        
-        catch {
-            
-            
-            
-        }
-        
-        return []
-    }
-    
-    func returnGoalsBetweenDate(from:Date, to:Date) -> [Goal] {
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        
-        let predicate = NSPredicate(format: "date >= %@ AND date <= %@", dateManager.startOfDay(for: from) as NSDate, dateManager.startOfDay(for: to) as NSDate)
-        
-        request.predicate = predicate
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            
-        let result = try context.fetch(request)
-            
-            return result
-        }
-        
-        catch {
-            
-            // Error ?
-            
-        }
-        
-        return []
-        
-    }
-    
-    
-    func returnTodaysGoals() -> [Goal] {
-        
-        // Get the current calendar with local time zone
-        var calendar = Calendar.current
-        calendar.timeZone = NSTimeZone.system
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-
-        // Get today's beginning & end
-        // let dateFrom = calendar.startOfDay(for: Date()) // eg. 2016-10-10 00:00:00
-        
-        let startDate = dateManager.startOfDay(for: Date())
-        
-        // print (Date())
-        
-        print ("from Date", startDate)
-        
-        let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)
-        
-        print ("To date", endDate as Any)
-        
-        // Set predicate as date being today's date
-        // let fromPredicate = NSPredicate(format: "%@ >= %@", date as NSDate, dateFrom as NSDate)
-        // let toPredicate = NSPredicate(format: "%@ < %@", date as NSDate, dateTo! as NSDate)
-        // let datePredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [fromPredicate, toPredicate])
-        
-        let predicate = NSPredicate(format: "date >= %@ AND date < %@", startDate as NSDate, endDate! as NSDate)
-        request.predicate = predicate
-        
-        request.returnsObjectsAsFaults = false
-        
-        do {
-            
-        let result = try context.fetch(request)
-            
-            return result
-        }
-        
-        catch {
-            
-            // Error ?
-            
-        }
-        
-        return []
-    }
-
-    func returnAllGoalsSortedByDate() -> [Goal] {
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        let sort = NSSortDescriptor(key: #keyPath(Goal.date), ascending: true)
-        request.sortDescriptors = [sort]
-        
-        do {
-            
-        let result = try context.fetch(request)
-            
-            return result
-        }
-        
-        catch {
-            
-            // Error ?
-            
-        }
-        
-        return []
-
-        
-    }
-    
-    
-    func showAllGoalUUIDs() {
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        
-        do {
-            
-        let result = try context.fetch(request)
-            
-            for i in 0 ..< result.count {
-                
-                print ("Found GoalID", result[i].goalId as Any)
-                
-            }
-            
-        }
-        
-        catch {
-            
-            
-            
-        }
-    }
     
     func fetchTask(taskID:UUID) -> Task {
         
@@ -427,55 +407,6 @@ class DataManager {
         return result
     }
     
-//    func showTasksForGoalUUID(goalID: UUID){
-//        
-//        do {
-//            
-//            let request = Task.fetchRequest() as NSFetchRequest<Task>
-//            
-//            let pred = NSPredicate(format: "%K == %@", #keyPath(Task.goal.goalId), goalID as CVarArg)
-//            
-//            request.predicate = pred
-//            
-//            let result = try context.fetch(request)
-//            
-//             print ("Found \(result.count) tasks")
-//            
-//            for i in 0 ..< result.count {
-//
-//                print (result[i].name as Any)
-//
-//            }
-//            
-//        }
-//        
-//        catch {
-//            
-//            
-//        }
-//        
-//    }
-    
-    func deleteGoal(goalId: UUID) {
-        
-        let request = Goal.fetchRequest() as NSFetchRequest<Goal>
-        request.predicate = NSPredicate(format: "%K == %@", #keyPath(Goal.goalId), goalId as CVarArg)
-        request.returnsObjectsAsFaults = false
-        do {
-            let result = try context.fetch(request)
-            
-           //  print ("**** datamanager deleting task")
-            
-            context.delete(result.first!)
-            
-            saveContext()
-            
-        } catch {
-            //Warning
-        }
-        
-    }
-    
     func deleteTask(taskId: UUID) {
         let request = Task.fetchRequest() as NSFetchRequest<Task>
         request.predicate = NSPredicate(format: "%K == %@", #keyPath(Task.taskId), taskId as CVarArg)
@@ -493,6 +424,8 @@ class DataManager {
       }
         
     }
+    
+    // MARK:- Method for building some test data
     
     func buildTestData(arg: Bool, completion: (Bool) -> ()) {
         
@@ -585,11 +518,9 @@ class DataManager {
             // Complete the goal if required
             
             let completedTasksCount  = tasks.filter { $0.completed == true }.count
-            
             let completed = completedTasksCount == tasks.count - 1 ? true : false
-            
             goals[i].completed = completed
-            
+            updateGoal(goal: goals[i])
             
         }
         
@@ -609,20 +540,6 @@ class DataManager {
             // Error
             
         }
-        
-        // We also delete tasks (although cascade option should do this), this fixes a coredata error
-        
-//        fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Task")
-//        batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-//
-//        do {
-//            try context.execute(batchDeleteRequest)
-//        }
-//        catch{
-//
-//            // Error
-//
-//        }
 
         saveContext()
         

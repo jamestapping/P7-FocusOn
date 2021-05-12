@@ -7,11 +7,24 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        // Ask for notifications permission
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+                 if (granted) {
+                     print ("Permission granted for Notifications")
+                 }
+                 else {
+                     print ("Notifications not allowed")
+                 }
+             }
+        
         
         // Remove line from top of navigation bar
         

@@ -9,6 +9,9 @@ import UIKit
 
 class HistoryGoalTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var date: UILabel!
+    @IBOutlet weak var name: UITextView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

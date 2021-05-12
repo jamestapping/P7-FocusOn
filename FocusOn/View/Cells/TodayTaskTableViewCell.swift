@@ -86,10 +86,6 @@ extension TodayTaskTableViewCell: UITextViewDelegate {
             
         }
         
-//        let size = CGSize(width: textView.frame.size.width, height: .infinity)
-//        let estimatedSize = textView.sizeThatFits(size)
-//        textView.frame.size.height = estimatedSize.height
-        
         delegate?.updateCellHeight()
     }
     

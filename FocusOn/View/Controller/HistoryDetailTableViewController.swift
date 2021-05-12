@@ -30,8 +30,6 @@ class HistoryDetailTableViewController: UITableViewController {
         
         let rowsInSection = dataManager.fetchTasksforGoalUUID(goalID: (recievedGoal?.goalId)!).count
         
-        print ("Rows in section", rowsInSection)
-        
         return rowsInSection
     }
 
@@ -44,7 +42,7 @@ class HistoryDetailTableViewController: UITableViewController {
         
         case 0:
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "historyGoalCell", for: indexPath) as! HistoryGoalDetailTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "historyGoalDetailCell", for: indexPath) as! HistoryGoalDetailTableViewCell
             
             let completed = recievedGoal?.completed
             let name = recievedGoal?.name

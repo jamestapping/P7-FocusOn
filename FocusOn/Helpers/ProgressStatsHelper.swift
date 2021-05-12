@@ -35,15 +35,10 @@ class ProgressStatsHelper {
         return goalDataForDates(first: firstDayOfWeek, last: lastDayOfWeek)
     }
     
-    
     func returnMonthData(date: Date) -> [(completed: Int, total: Int)] {
+        
         let firstDayOfMonth = dateManager.firstDayOfMonth(for: date)
-        
-        print ("First Day Of Month ",firstDayOfMonth )
-        
         let lastDayOfMonth = dateManager.lastDayOfMonth(for: date)
-        
-        print ("Last day of month",lastDayOfMonth)
         
         return goalDataForMonth(first: firstDayOfMonth, last: lastDayOfMonth)
     }
@@ -54,22 +49,15 @@ class ProgressStatsHelper {
         var data = [(completed: Int, total: Int)]()
         let goals = dataManager.returnGoalsBetweenDate(from: first, to: last)
         
-        print ("Got", goals.count, " goals")
-        
-        // print(goals[0].date as Any)
-        
         var completed = 0
         var total = 0
         var date = first
-        
-        print ("Number of days in month ", numberOfDaysInMonth)
         
         for _ in 1 ... numberOfDaysInMonth {
             
             let goalsForDate = goals.filter { $0.date == dateManager.startOfDay(for: date) }
             
-            print ("Found", goalsForDate.count, "for date", dateManager.startOfDay(for: date))
-            
+            // print ("Found", goalsForDate.count, "for date", dateManager.startOfDay(for: date))
             
             if goalsForDate.count > 0 {
                 completed = goalsForDate.filter { $0.completed == true }.count
@@ -91,17 +79,11 @@ class ProgressStatsHelper {
         var data = [(completed: Int, total: Int)]()
         let goals = dataManager.returnGoalsBetweenDate(from: first, to: last)
         
-        print ("Got", goals.count, " goals")
-        
-        //print(goals[0].date as Any)
-        
         var completed = 0
         var total = 0
         var date = first
         for _ in 1 ... 7 {
             let goalsForDate = goals.filter { $0.date == dateManager.startOfDay(for: date) }
-            
-            print ("Found", goalsForDate.count, "for date", dateManager.startOfDay(for: date))
             
             if goalsForDate.count > 0 {
                 completed = goalsForDate.filter { $0.completed == true }.count
@@ -131,11 +113,8 @@ class ProgressStatsHelper {
     func buildFirstDayOfWeekLabel(date: Date) -> String {
         
         let firstDayOfWeek = dateManager.firstDayOfWeek(for: date)
-        
         let dateFormatter = DateFormatter()
-        
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        
         let formattedDate = dateFormatter.string(from: firstDayOfWeek)
         
         return formattedDate

@@ -8,8 +8,18 @@
 import Foundation
 import UIKit
 import SAConfettiView
+import UserNotifications
 
 class TodayTableViewController: UITableViewController {
+    
+    let untick = UIImage(named: "untick-gray")
+    let untickWhite = UIImage(named: "untick-white")
+    
+    var dataManager = DataManager()
+    var dateManager = DateManager()
+    var helper = GeneralHelper()
+
+    var goals = [Goal]()
     
     @IBAction func didTapAddGoal(_ sender: Any) {
         
@@ -28,32 +38,25 @@ class TodayTableViewController: UITableViewController {
         }
     }
     
-    let untick = UIImage(named: "untick-gray")
-    let untickWhite = UIImage(named: "untick-white")
-    
-    var dataManager = DataManager()
-    var dateManager = DateManager()
-    
-    var goals = [Goal]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print ("Today View  - ViewDidLoad")
-        
         configure()
+        
+        checkFirstRun()
+        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
         
-        print ("Today View  - ViewDidAppear")
+        checkYesterdaysGoals()
         
-        updateTableView()
     }
-    
     
     func configure() {
+        
+        registerForKeyboardNotifications()
+        scheduleMorningNotification()
         
         // Change navigation bar titles / button fonts
         
@@ -63,18 +66,121 @@ class TodayTableViewController: UITableViewController {
 
         }
     
+    // Stop tableview from being hidden by keyboard
+    
+    func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc func keyboardWillShow(notification: NSNotification){
+        
+        let keyboardFrame = notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! CGRect
+        adjustLayoutForKeyboard(targetHeight: keyboardFrame.size.height)
+    }
+
+    @objc func keyboardWillHide(notification: NSNotification){
+        
+        adjustLayoutForKeyboard(targetHeight: 0)
+        
+    }
+
+    func adjustLayoutForKeyboard(targetHeight: CGFloat){
+
+            tableView.contentInset.bottom = targetHeight
+        
+    }
+    
     func updateTableView() {
         
-        print ("Updating TableView ....")
-        
         goals = dataManager.returnTodaysGoals()
-        
-        print ("Return goals count", goals.count)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.tableView.reloadData()
         }
         
+    }
+    
+    func checkYesterdaysGoals() {
+    
+        goals = dataManager.returnTodaysGoals()
+        
+        let today = dateManager.startOfDay(for: Date())
+        let yesterday = dateManager.startOfDay(for: Date()).addingTimeInterval(-86400)
+        let yesterdaysGoals = dataManager.returnGoalsBetweenDate(from: yesterday, to: today)
+        let completedGoals = yesterdaysGoals.filter{ $0.completed }.count
+        
+        let pluralize = yesterdaysGoals.count == 1 ? "" : "s"
+        let pluralize2 = yesterdaysGoals.count == 1 ? "it " : "them"
+        
+        if goals.count == 0 && yesterdaysGoals.count != 0 && completedGoals == 0 {
+            
+            self.showAlert(title: "FocusOn",
+                           message: "Found uncompleted goal\(pluralize) from yesterday, would you like to use \(pluralize2)?",
+                           alertStyle: .alert,
+                           actionTitles: ["Yes","No"],
+                           actionStyles: [.default, .default],
+                           actions: [
+                           
+                            { [self]_ in
+                                
+                                for i in 0 ... yesterdaysGoals.count - 1 {
+                                     yesterdaysGoals[i].date = dateManager.startOfDay(for: Date())
+                                     dataManager.updateGoal(goal: yesterdaysGoals[i])
+                                }
+                                
+                                goals = dataManager.returnTodaysGoals()
+                                tableView.reloadData()
+                                
+                            },
+                            
+                            { []_ in
+                            
+                                // Do nothing
+                            }
+                           ])
+            
+        }
+            
+        tableView.reloadData()
+    }
+    
+    func scheduleMorningNotification() {
+        
+        let identifier = "FocusOnMorning"
+        let notificationCenter = UNUserNotificationCenter.current()
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
+
+        // delete any scheduled notifications
+        notificationCenter.removeDeliveredNotifications(withIdentifiers: [identifier])
+
+        let content = UNMutableNotificationContent()
+        content.title = "FocusOn"
+        content.body = "Good Morning - Lets set some goals for Today!"
+        content.sound = UNNotificationSound.default
+           
+        // We want to set a date of tomorrow 8am so as not to send a notification if the person uses
+        // the app before that time.
+        
+        let date = calendar.date(bySettingHour: 8, minute: 0, second: 0, of: Date().addingTimeInterval(86400))
+
+        let components = calendar.dateComponents([.day, .hour, .minute, .second], from: date!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+           
+        // schedule notification
+        
+        notificationCenter.add(request) { error in
+            if let error = error {
+                print(error)
+                
+                return
+            }
+            
+            print("Notification Scheduled")
+        }
+
     }
     
     func showWellDoneAlert() {
@@ -101,6 +207,28 @@ class TodayTableViewController: UITableViewController {
                             confettiView.removeFromSuperview()
                         }
                        ])
+    }
+    
+    func checkFirstRun() {
+        
+        if helper.isFirstRun() {
+            
+            showAlert(title: "FocusOn",
+                           message: helper.welcomeMessage,
+                           alertStyle: .alert,
+                           actionTitles: ["Ok"],
+                           actionStyles: [.default],
+                           actions: [
+                           
+                            { []_ in
+                            
+                                // action do nothing.
+                                
+                            }
+                           ])
+            
+        }
+        
     }
 
     // MARK: - Table view data source
@@ -147,17 +275,13 @@ class TodayTableViewController: UITableViewController {
             if indexPath.row == 0 {
                 
                 deleteGoalCell(indexPath: indexPath)
-                
                 goals.remove(at: indexPath.section)
-                
                 let indexSet = IndexSet(arrayLiteral: indexPath.section)
-                
                 tableView.deleteSections(indexSet, with: .fade)
 
             } else {
                 
                 deleteTaskcell(indexPath: indexPath)
-                
                 tableView.deleteRows(at: [indexPath], with: .fade)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
@@ -292,18 +416,14 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
     
     func moveToBottomOfTableView(cell: TodayTaskTableViewCell) {
         
-        let indexPath = self.tableView.indexPath(for: cell)
-        
-        let section = indexPath?.section
-        
-        if section == goals.count - 1 {
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                
-                let newGoalIndexPath = IndexPath(row: 0, section: self.tableView.numberOfSections - 1)
-                self.tableView.scrollToRow(at: newGoalIndexPath, at: .top, animated: true)
-            }
+        print ("Scrolling to bottom of table view")
+    
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+
+            let newGoalIndexPath = IndexPath(row: 0, section: self.tableView.numberOfSections - 1)
+            self.tableView.scrollToRow(at: newGoalIndexPath, at: .top, animated: true)
         }
+    
     }
 
     func updateCellHeight() {
@@ -337,8 +457,6 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         
         if goals[goalToUpdate].completed == true {
 
-            print ("*** Goal completed so updating all tasks")
-
             // Get all tasks for the goal and mark them as completed
 
             let goalID = goals[goalToUpdate].goalId
@@ -347,27 +465,14 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
             for i in 0 ..< tasks.count - 1 {
                 
                 tasks[i].completed = true
-             
-                dataManager.updateTask(task: tasks[i], completed: true)
+                
+                dataManager.updateTask(task: tasks[i])
             }
         
             tableView.reloadData()
             
             showWellDoneAlert()
-            
-            // Debug
-            
-            print ("*** updateGoalCellCompletion says : ")
-            
-            let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
-            
-            print ("Goal completed", goals[goalToUpdate].completed )
-            
-            for i in 0 ..< testTasks.count  {
-                
-                print ("Task",i , testTasks[i].completed)
-                
-            }
+    
         }
     }
     
@@ -404,6 +509,8 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         
         dataManager.updateTask(task: task, name: name)
         
+        //dataManager.updateTask(task: task)
+        
         // only remove tasks if field is empty and this isn't the last row
             
         if task.name == "" && tasks.count != 1  {
@@ -423,32 +530,16 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         
         dataManager.updateTask(task: task, completed: completed)
         
-        // Debug
-        
-        print ("*** updateTaskCellCompletion says : ")
-        
-        let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
-        
-        print ("Goal completed", goals[indexPath.section].completed )
-        
-        for i in 0 ..< testTasks.count  {
-            
-            print ("Task",i , testTasks[i].completed)
-            
-        }
+        // dataManager.updateTask(task: task)
         
         // Check if all tasks completed
         
         let completedCount = tasks.filter{ $0.completed == true }.count
         
-        print ("Completed Count", completedCount)
-        
-        print("Task Completed", task.completed)
-        
         if completedCount == tasks.count - 1 && !goals[indexPath.section].completed  {
             
             showAlert(title: "FocusOn",
-                           message: "You have completed all tasks, shall I mark the goal as completed?",
+                           message: helper.completedAllTasksMessage,
                            alertStyle: .alert,
                            actionTitles: ["Yes","No"],
                            actionStyles: [.default, .default],
@@ -464,25 +555,11 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
                                 
                                 showWellDoneAlert()
                                 
-                                // Debug
-                                
-                                print ("*** updateTaskCellCompletion  after question says : ")
-                                
-                                let testTasks = dataManager.fetchTasksforGoalUUID(goalID: goalID!)
-                                
-                                print ("Goal completed", goals[indexPath.section].completed )
-                                
-                                for i in 0 ..< testTasks.count  {
-                                    
-                                    print ("Task",i , testTasks[i].completed)
-                                    
-                                }
                             },
                             
                             { []_ in
                         
                                 // Action 2 - Do nothing
-                           
                             }
                            ])
             

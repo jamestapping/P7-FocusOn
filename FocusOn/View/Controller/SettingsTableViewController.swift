@@ -65,7 +65,6 @@ class SettingsTableViewController: UITableViewController {
                                                             { [self]_ in
 
                                                                 navigationController?.popToRootViewController(animated: true)
-
                                                             }
 
                                                            ])
@@ -75,16 +74,15 @@ class SettingsTableViewController: UITableViewController {
                                     
                                 }
                                 
-                                
                             },
                             
                             { []_ in
-                                
-                            
+
+
                                 // Action 2
-                            
-                                // Do nothing 
-                           
+
+                                // Do nothing
+
                             }
                            ])
             

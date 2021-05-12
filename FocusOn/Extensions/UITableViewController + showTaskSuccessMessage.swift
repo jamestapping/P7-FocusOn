@@ -17,6 +17,8 @@ extension UITableViewController {
     
     func showTaskAnimatedMessage(_ messageType: MessageType) {
         
+        let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 49.0
+        
         let midnightBlue = UIColor(named: "MidnightBlue")
         let messageWidth = tableView.frame.size.width/16.0*14.0 + 12
         let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2, y: self.view.frame.size.height + 250 , width: messageWidth, height: 44))
@@ -49,7 +51,7 @@ extension UITableViewController {
             
             UIView.animate(withDuration: 0.8, delay: 0, usingSpringWithDamping: 0.5 , initialSpringVelocity: 12, options: .curveLinear, animations: {
                 
-                toastLabel.transform = CGAffineTransform(translationX: 0, y: -350)
+                toastLabel.transform = CGAffineTransform(translationX: 0, y: -tabBarHeight + -310)
                 toastLabel.alpha = 1
             })
             

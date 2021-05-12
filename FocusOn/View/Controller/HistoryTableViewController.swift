@@ -34,16 +34,12 @@ class HistoryTableViewController: UITableViewController {
     var tempDate:String?
     var dateText: String?
     
-    
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Change navigation bar titles font
         
         self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Helvetica Neue Bold", size: 19)!]
-    
         
     }
     
@@ -51,15 +47,6 @@ class HistoryTableViewController: UITableViewController {
         super.viewDidAppear(animated)
         
         goals = dataManager.returnAllGoalsSortedByDate()
-        
-        
-        // Quick and dirty Debug
-        
-        for i in 0 ..< goals.count {
-            
-            print (goals[i].date as Any)
-            
-        }
         
         buildHistory()
         buildDaysHeaders()
@@ -129,10 +116,7 @@ class HistoryTableViewController: UITableViewController {
                 let date = dateManager.dateAsString(for: items[i][j].date!)
                 if tempDate != date {
                     hasIndex.insert(Pair(i: i, j: j))
-                    // OR items[i][j].showHeader = true
                     tempDate = date
-                } else {
-                    // OR items[i][j].showHeader = false
                 }
             }
         }
@@ -180,9 +164,6 @@ class HistoryTableViewController: UITableViewController {
                 tempItems = []
                 
                 sectionHeaders.append(tempMonth)
-                
-                // completedStats.append(CompletedStat(completedInMonth: 0, totalInMonth: goalsPerMonth))
-                
                 tempMonth = (goals[i].date?.monthAsString())!
 
             }
@@ -192,7 +173,6 @@ class HistoryTableViewController: UITableViewController {
         // add the last month header and last months items (goals)
         
         sectionHeaders.append(tempMonth)
-        
         items.append(tempItems)
         
     }
@@ -245,20 +225,23 @@ class HistoryTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "historyGoalCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "historyGoalCell", for: indexPath) as! HistoryGoalTableViewCell
+        
         let name = items[indexPath.section][indexPath.row].name
         let date = dateManager.dateAsString(for: items[indexPath.section][indexPath.row].date!)
+        let completed = items[indexPath.section][indexPath.row].completed
+        
         
         if hasIndex.contains(Pair(i: indexPath.section, j: indexPath.row)) {
-                cell.textLabel?.text = date
+                cell.date.text = date
             
             } else {
                 
-                cell.textLabel?.text = ""
+                cell.date.text = ""
             }
             
-            cell.detailTextLabel?.text = name
-    
+            cell.name?.text = name
+            completed ? cell.name.strike(type: .single) : cell.name.unstrike()
         
         return cell
     }

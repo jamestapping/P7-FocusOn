@@ -92,7 +92,6 @@ extension TodayGoalTableViewCell: UITextViewDelegate {
             
         }
         
-        
         delegate?.updateGoalCell(cell: self)
         
     }
