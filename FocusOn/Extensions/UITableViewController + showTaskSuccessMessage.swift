@@ -19,11 +19,10 @@ extension UITableViewController {
         
         let tabBarHeight = self.tabBarController?.tabBar.frame.height ?? 49.0
         
-        let midnightBlue = UIColor(named: "MidnightBlue")
         let messageWidth = tableView.frame.size.width/16.0*14.0 + 12
         let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2, y: self.view.frame.size.height + 250 , width: messageWidth, height: 44))
         toastLabel.center.x = self.view.center.x
-        toastLabel.backgroundColor = midnightBlue!.withAlphaComponent(0.7)
+        toastLabel.backgroundColor = UIColor.midnightBlue!.withAlphaComponent(0.7)
         toastLabel.textColor = UIColor.white
         toastLabel.font = UIFont(name: "Helvetica Neue Bold", size: 20)
         toastLabel.textAlignment = .center
@@ -78,7 +77,7 @@ func generateSuccessString() -> String {
 
 func generateFailureString() -> String {
     
-    let failureMessages = ["Oh No, nevermind!", "You were so close :(",
+    let failureMessages = ["Oh no, nevermind!", "You were so close :(",
                            "Better luck next time", "Oh dear!","Argghh, oh well :(",
                            "Not the end of the world :)",
                            "Keep trying ...", "Could do better :)", "You can still do this!"]

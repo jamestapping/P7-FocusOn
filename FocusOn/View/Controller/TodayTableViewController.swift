@@ -415,8 +415,6 @@ class TodayTableViewController: UITableViewController {
 extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate {
     
     func moveToBottomOfTableView(cell: TodayTaskTableViewCell) {
-        
-        print ("Scrolling to bottom of table view")
     
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
 
@@ -508,8 +506,6 @@ extension TodayTableViewController: TodayGoalCellDelegate, TodayTaskCellDelegate
         let task = tasks[indexPath.row - 2]
         
         dataManager.updateTask(task: task, name: name)
-        
-        //dataManager.updateTask(task: task)
         
         // only remove tasks if field is empty and this isn't the last row
             

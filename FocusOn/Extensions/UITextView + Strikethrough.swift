@@ -31,7 +31,7 @@ extension NSAttributedString {
         mutableAttributedString.removeAttribute(attributeName, range: fullRange)
         mutableAttributedString.addAttribute(attributeName, value: style.rawValue, range: range ?? fullRange)
 
-        mutableAttributedString.addAttribute(NSAttributedString.Key.strikethroughColor, value: UIColor(named: "MidnightBlue") as Any, range: NSMakeRange(0, mutableAttributedString.length))
+        mutableAttributedString.addAttribute(NSAttributedString.Key.strikethroughColor, value: UIColor.midnightBlue as Any, range: NSMakeRange(0, mutableAttributedString.length))
         
         return mutableAttributedString
     }

@@ -290,69 +290,57 @@
                                 </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="TaskCellID" id="feH-ej-DSz" customClass="TodayTaskTableViewCell" customModule="FocusOn" customModuleProvider="target">
-                                <rect key="frame" x="20" y="163.5" width="374" height="46"/>
+                                <rect key="frame" x="20" y="163.5" width="374" height="41"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="feH-ej-DSz" id="HkT-qW-rge">
-                                    <rect key="frame" x="0.0" y="0.0" width="374" height="46"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="374" height="41"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uxY-FB-UmQ" userLabel="TaskView">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="46"/>
-                                            <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Example Task" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cMj-R5-X4W">
-                                                    <rect key="frame" x="64" y="2" width="302" height="39"/>
-                                                    <color key="tintColor" name="CatalinaBlue"/>
-                                                    <color key="textColor" name="MidnightBlue"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
-                                                </textView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOV-Jb-NC7">
-                                                    <rect key="frame" x="20" y="0.0" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="L67-Uf-aDD"/>
-                                                        <constraint firstAttribute="width" constant="44" id="jEl-ev-wFp"/>
-                                                    </constraints>
-                                                    <color key="tintColor" name="MidnightBlue"/>
-                                                    <state key="normal">
-                                                        <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapAddTaskButton:" destination="feH-ej-DSz" eventType="touchUpInside" id="5GK-2Z-BYE"/>
-                                                    </connections>
-                                                </button>
-                                                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lVC-zW-oIi" userLabel="TaskToggleButton" customClass="CheckMarkToggleButtonBlack" customModule="FocusOn" customModuleProvider="target">
-                                                    <rect key="frame" x="20" y="0.0" width="44" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="44" id="7iv-wM-jlF"/>
-                                                        <constraint firstAttribute="width" constant="44" id="BFo-Gu-FSA"/>
-                                                    </constraints>
-                                                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <state key="normal">
-                                                        <imageReference key="image" image="circle" catalog="system" symbolScale="large"/>
-                                                    </state>
-                                                    <connections>
-                                                        <action selector="didTapTaskToggle:" destination="feH-ej-DSz" eventType="touchUpInside" id="rmA-Fn-eVK"/>
-                                                    </connections>
-                                                </button>
-                                            </subviews>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="Example Task" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="cMj-R5-X4W">
+                                            <rect key="frame" x="64" y="2" width="302" height="39"/>
+                                            <color key="tintColor" name="CatalinaBlue"/>
+                                            <color key="textColor" name="MidnightBlue"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences" returnKeyType="done"/>
+                                        </textView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOV-Jb-NC7">
+                                            <rect key="frame" x="20" y="-1.5" width="44" height="44"/>
                                             <constraints>
-                                                <constraint firstItem="VOV-Jb-NC7" firstAttribute="top" secondItem="uxY-FB-UmQ" secondAttribute="top" id="1HD-FW-6Y8"/>
-                                                <constraint firstItem="lVC-zW-oIi" firstAttribute="leading" secondItem="uxY-FB-UmQ" secondAttribute="leading" constant="20" symbolic="YES" id="Cn5-nr-EC6"/>
-                                                <constraint firstAttribute="bottom" secondItem="cMj-R5-X4W" secondAttribute="bottomMargin" constant="13" id="KvD-7A-ws0"/>
-                                                <constraint firstItem="VOV-Jb-NC7" firstAttribute="leading" secondItem="uxY-FB-UmQ" secondAttribute="leading" constant="20" symbolic="YES" id="UzO-GW-TKo"/>
-                                                <constraint firstItem="cMj-R5-X4W" firstAttribute="leading" secondItem="lVC-zW-oIi" secondAttribute="trailing" id="gP0-XN-rm3"/>
-                                                <constraint firstAttribute="trailing" secondItem="cMj-R5-X4W" secondAttribute="trailing" constant="8" id="mhq-Xb-XMN"/>
-                                                <constraint firstItem="lVC-zW-oIi" firstAttribute="top" secondItem="uxY-FB-UmQ" secondAttribute="top" id="sGt-wV-zSg"/>
-                                                <constraint firstItem="cMj-R5-X4W" firstAttribute="top" secondItem="uxY-FB-UmQ" secondAttribute="top" constant="2" id="wzQ-3f-Y3A"/>
+                                                <constraint firstAttribute="height" constant="44" id="L67-Uf-aDD"/>
+                                                <constraint firstAttribute="width" constant="44" id="jEl-ev-wFp"/>
                                             </constraints>
-                                        </view>
+                                            <color key="tintColor" name="MidnightBlue"/>
+                                            <state key="normal">
+                                                <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="didTapAddTaskButton:" destination="feH-ej-DSz" eventType="touchUpInside" id="5GK-2Z-BYE"/>
+                                            </connections>
+                                        </button>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lVC-zW-oIi" userLabel="TaskToggleButton" customClass="CheckMarkToggleButtonBlack" customModule="FocusOn" customModuleProvider="target">
+                                            <rect key="frame" x="20" y="-1.5" width="44" height="44"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="44" id="7iv-wM-jlF"/>
+                                                <constraint firstAttribute="width" constant="44" id="BFo-Gu-FSA"/>
+                                            </constraints>
+                                            <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal">
+                                                <imageReference key="image" image="circle" catalog="system" symbolScale="large"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="didTapTaskToggle:" destination="feH-ej-DSz" eventType="touchUpInside" id="rmA-Fn-eVK"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="uxY-FB-UmQ" secondAttribute="trailing" id="Mgb-Vw-Woc"/>
-                                        <constraint firstItem="uxY-FB-UmQ" firstAttribute="top" secondItem="HkT-qW-rge" secondAttribute="top" id="afc-xc-7be"/>
-                                        <constraint firstItem="uxY-FB-UmQ" firstAttribute="leading" secondItem="HkT-qW-rge" secondAttribute="leading" id="efC-gp-U6P"/>
-                                        <constraint firstAttribute="bottom" secondItem="uxY-FB-UmQ" secondAttribute="bottom" id="kaV-sk-HLc"/>
+                                        <constraint firstItem="lVC-zW-oIi" firstAttribute="leading" secondItem="HkT-qW-rge" secondAttribute="leading" constant="20" symbolic="YES" id="9Uc-PP-0FK"/>
+                                        <constraint firstItem="VOV-Jb-NC7" firstAttribute="centerY" secondItem="HkT-qW-rge" secondAttribute="centerY" id="GTH-fa-E2I"/>
+                                        <constraint firstAttribute="trailing" secondItem="cMj-R5-X4W" secondAttribute="trailing" constant="8" id="L60-58-9aG"/>
+                                        <constraint firstItem="VOV-Jb-NC7" firstAttribute="leading" secondItem="HkT-qW-rge" secondAttribute="leading" constant="20" symbolic="YES" id="MBH-tO-lHf"/>
+                                        <constraint firstAttribute="bottom" secondItem="cMj-R5-X4W" secondAttribute="bottomMargin" priority="999" constant="8" id="Qvj-xb-OzU"/>
+                                        <constraint firstItem="cMj-R5-X4W" firstAttribute="leading" secondItem="lVC-zW-oIi" secondAttribute="trailing" id="azu-TN-qPx"/>
+                                        <constraint firstItem="cMj-R5-X4W" firstAttribute="top" secondItem="HkT-qW-rge" secondAttribute="top" constant="2" id="gzp-WP-ddA"/>
+                                        <constraint firstItem="lVC-zW-oIi" firstAttribute="centerY" secondItem="HkT-qW-rge" secondAttribute="centerY" id="pZk-Wq-ndD"/>
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>

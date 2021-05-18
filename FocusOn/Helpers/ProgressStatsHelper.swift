@@ -57,8 +57,6 @@ class ProgressStatsHelper {
             
             let goalsForDate = goals.filter { $0.date == dateManager.startOfDay(for: date) }
             
-            // print ("Found", goalsForDate.count, "for date", dateManager.startOfDay(for: date))
-            
             if goalsForDate.count > 0 {
                 completed = goalsForDate.filter { $0.completed == true }.count
                 total = goalsForDate.count

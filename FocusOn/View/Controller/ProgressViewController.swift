@@ -258,11 +258,6 @@ class ProgressViewController: UIViewController {
     
     func weekDisplay() {
         
-        enum daysOfWeek: CaseIterable {
-            
-            case Mon, Tue, Wed, Thu, Fri, Sat, Sun
-        }
-        
         dateDisplay.text = statsHelper.buildFirstDayOfWeekLabel(date: week)
         
         displayChoice.selectedSegmentIndex = 0
