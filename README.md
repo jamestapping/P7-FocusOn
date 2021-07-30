@@ -1,1 +1,1 @@
-# P7-FocusOn
+OpenClassrooms - iOS developer path - iOS Project 7
